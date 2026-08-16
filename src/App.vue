@@ -14,12 +14,12 @@ import FooterBar from './components/FooterBar.vue'
             <!-- Hero Section -->
             <section id="hero" class="hero-section">
                 <!-- Decorative star dots -->
-                <span class="star-dot star-gold" style="top: 12%; left: 8%;">?</span>
-                <span class="star-dot star-purple" style="top: 22%; left: 46%;">?</span>
-                <span class="star-dot star-white" style="top: 8%; left: 62%;">?</span>
-                <span class="star-dot star-purple" style="top: 68%; left: 4%;">?</span>
-                <span class="star-dot star-gold" style="top: 78%; left: 52%;">?</span>
-                <span class="star-dot star-white" style="top: 40%; left: 92%;">?</span>
+                <span class="star-dot star-gold" style="top: 12%; left: 8%;">✦</span>
+                <span class="star-dot star-purple" style="top: 22%; left: 46%;">✦</span>
+                <span class="star-dot star-white" style="top: 8%; left: 62%;">✦</span>
+                <span class="star-dot star-purple" style="top: 68%; left: 4%;">✦</span>
+                <span class="star-dot star-gold" style="top: 78%; left: 52%;">✦</span>
+                <span class="star-dot star-white" style="top: 40%; left: 92%;">✦</span>
 
                 <div class="container">
                     <div class="hero-content">
