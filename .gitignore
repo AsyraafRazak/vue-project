@@ -42,3 +42,5 @@ node_modules/
 dist/
 .vs/
 *.local
+.vs/
+*.vsidx
