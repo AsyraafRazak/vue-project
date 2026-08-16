@@ -17,7 +17,7 @@ import FooterBar from './components/FooterBar.vue'
           <div class="hero-content">
             <span class="badge">Introducing SaaSFlow 2.0</span>
             <h1 class="hero-title">
-              Work smarter. <br />
+              Work smarter2. <br />
               <span>Flow faster.</span>
             </h1>
             <p class="hero-lead">
