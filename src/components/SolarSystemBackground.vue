@@ -275,7 +275,7 @@
         })
         scene.add(nebula)
 
-        // Deep starfield — spherical distribution, varied sizes
+        // Deep starfield - spherical distribution, varied sizes
         const starGlowTexture = makeStarGlowTexture()
         const starPalette = [
             new THREE.Color('#ffffff'),
