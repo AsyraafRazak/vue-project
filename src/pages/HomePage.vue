@@ -1,353 +1,321 @@
 ﻿<script setup>
-    import { ref, onMounted, onBeforeUnmount } from 'vue'
-    import NavBar from './components/NavBar.vue'
-    import FooterBar from './components/FooterBar.vue'
-    import SparkleCursor from './components/SparkleCursor.vue'
-    import ThreeBackground from './components/ThreeBackground.vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import ThreeBackground from '../components/ThreeBackground.vue'
 
-    const ctaSection = ref(null)
-    const astronautActive = ref(false)
-    const parallaxOffset = ref(0)
+const ctaSection = ref(null)
+const astronautActive = ref(false)
+const parallaxOffset = ref(0)
 
-    function handleScroll() {
-        const el = ctaSection.value
-        if (!el) return
+function handleScroll() {
+    const el = ctaSection.value
+    if (!el) return
 
-        const rect = el.getBoundingClientRect()
-        const windowHeight = window.innerHeight
+    const rect = el.getBoundingClientRect()
+    const windowHeight = window.innerHeight
 
-        if (rect.top < windowHeight * 0.85 && !astronautActive.value) {
-            astronautActive.value = true
-        }
-
-        const progress = 1 - Math.max(0, Math.min(1, rect.top / windowHeight))
-        parallaxOffset.value = progress * 40
+    if (rect.top < windowHeight * 0.85 && !astronautActive.value) {
+        astronautActive.value = true
     }
 
-    onMounted(() => {
-        window.addEventListener('scroll', handleScroll, { passive: true })
-        handleScroll()
-    })
+    const progress = 1 - Math.max(0, Math.min(1, rect.top / windowHeight))
+    parallaxOffset.value = progress * 40
+}
 
-    onBeforeUnmount(() => {
-        window.removeEventListener('scroll', handleScroll)
-    })
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+})
 
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
-
 <template>
-    <div class="app-layout">
-        <SparkleCursor />
-        <!-- Navigation Bar -->
-        <NavBar />
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <video class="hero-bg-video" autoplay muted loop playsinline>
+            <source src="https://slategrey-pig-993603.hostingersite.com/wp-content/uploads/2026/08/copy_F1BD6054-509C-417B-9A22-BBB84A59D313-4.mov" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
+        <span class="star-dot star-gold" style="top: 12%; left: 8%;">✦</span>
+        <span class="star-dot star-purple" style="top: 22%; left: 46%;">✦</span>
+        <span class="star-dot star-white" style="top: 8%; left: 62%;">✦</span>
+        <span class="star-dot star-purple" style="top: 68%; left: 4%;">✦</span>
+        <span class="star-dot star-gold" style="top: 78%; left: 52%;">✦</span>
+        <span class="star-dot star-white" style="top: 40%; left: 92%;">✦</span>
 
-            <!-- Hero Section -->
-            <section id="hero" class="hero-section">
-                <!-- Background video -->
-                <video class="hero-bg-video" autoplay muted loop playsinline>
-                    <source src="https://slategrey-pig-993603.hostingersite.com/wp-content/uploads/2026/08/copy_F1BD6054-509C-417B-9A22-BBB84A59D313-4.mov" type="video/mp4" />
-                </video>
-                <div class="hero-overlay"></div>
-
-                <!-- Decorative star dots -->
-                <span class="star-dot star-gold" style="top: 12%; left: 8%;">✦</span>
-                <span class="star-dot star-purple" style="top: 22%; left: 46%;">✦</span>
-                <span class="star-dot star-white" style="top: 8%; left: 62%;">✦</span>
-                <span class="star-dot star-purple" style="top: 68%; left: 4%;">✦</span>
-                <span class="star-dot star-gold" style="top: 78%; left: 52%;">✦</span>
-                <span class="star-dot star-white" style="top: 40%; left: 92%;">✦</span>
-
-                <div class="container">
-                    <div class="hero-content">
-                        <span class="kicker">TWO DEVS. ONE VISION.</span>
-                        <h1 class="hero-title">
-                            Design bold. <br />
-                            <span>Build Fast.</span>
-                        </h1>
-                        <p class="hero-lead">
-                            We design and develop websites, apps, and digital products — from clean landing pages to full custom builds. Small team, direct communication, zero fluff.
-                        </p>
-                        <div class="hero-actions">
-                            <a href="#signup" class="btn btn-primary btn-large">Start Your Project</a>
-                            <a href="#features" class="btn btn-secondary btn-large">
-                                See What We Do
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                    <polyline points="12 5 19 12 12 19" />
-                                </svg>
-                            </a>
-                            <div class="hero-social-proof">
-                                <p>Built With Tools We Trust</p>
-                                <div class="brand-logos">
-                                    <img src="https://cdn.simpleicons.org/vuedotjs/A99BC2" alt="Vue" class="brand-logo-icon" />
-                                    <img src="https://cdn.simpleicons.org/threedotjs/A99BC2" alt="Three.js" class="brand-logo-icon" />
-                                    <img src="https://cdn.simpleicons.org/figma/A99BC2" alt="Figma" class="brand-logo-icon" />
-                                    <img src="https://cdn.simpleicons.org/wordpress/A99BC2" alt="WordPress" class="brand-logo-icon" />
-                                </div>
-                            </div>
+        <div class="container">
+            <div class="hero-content">
+                <span class="kicker">TWO DEVS. ONE VISION.</span>
+                <h1 class="hero-title">
+                    Design bold. <br />
+                    <span>Build Fast.</span>
+                </h1>
+                <p class="hero-lead">
+                    We design and develop websites, apps, and digital products — from clean landing pages to full custom builds. Small team, direct communication, zero fluff.
+                </p>
+                <div class="hero-actions">
+                    <a href="#signup" class="btn btn-primary btn-large">Start Your Project</a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        See What We Do
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </a>
+                    <div class="hero-social-proof">
+                        <p>Built With Tools We Trust</p>
+                        <div class="brand-logos">
+                            <img src="https://cdn.simpleicons.org/vuedotjs/A99BC2" alt="Vue" class="brand-logo-icon" />
+                            <img src="https://cdn.simpleicons.org/threedotjs/A99BC2" alt="Three.js" class="brand-logo-icon" />
+                            <img src="https://cdn.simpleicons.org/figma/A99BC2" alt="Figma" class="brand-logo-icon" />
+                            <img src="https://cdn.simpleicons.org/wordpress/A99BC2" alt="WordPress" class="brand-logo-icon" />
                         </div>
-                    </div>
-
-                    <!-- Mock Interactive UI Dashboard Showcase -->
-                    <div class="hero-showcase">
-
-                        <!-- Back card (offset, smaller, dimmer) -->
-                        <div class="mock-browser mock-browser-back">
-                            <div class="browser-header">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                                <span class="browser-address">app.twodazzle.io/analytics</span>
-                            </div>
-                            <div class="browser-body">
-                                <div class="mock-sidebar">
-                                    <div class="mock-nav-item"></div>
-                                    <div class="mock-nav-item active"></div>
-                                    <div class="mock-nav-item"></div>
-                                    <div class="mock-nav-item"></div>
-                                </div>
-                                <div class="mock-main">
-                                    <div class="mock-chart-container">
-                                        <div class="mock-card">
-                                            <div class="mock-card-header"></div>
-                                            <div class="mock-chart-bar-group">
-                                                <div class="mock-bar bar-1"></div>
-                                                <div class="mock-bar bar-2"></div>
-                                                <div class="mock-bar bar-3"></div>
-                                                <div class="mock-bar bar-4"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Front card (main, your original one) -->
-                        <div class="mock-browser mock-browser-front">
-                            <div class="browser-header">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                                <span class="browser-address">app.twodazzle.io/dashboard</span>
-                            </div>
-                            <div class="browser-body">
-                                <div class="mock-sidebar">
-                                    <div class="mock-nav-item active"></div>
-                                    <div class="mock-nav-item"></div>
-                                    <div class="mock-nav-item"></div>
-                                    <div class="mock-nav-item"></div>
-                                </div>
-                                <div class="mock-main">
-                                    <div class="mock-chart-container">
-                                        <div class="mock-card">
-                                            <div class="mock-card-header"></div>
-                                            <div class="mock-chart-bar-group">
-                                                <div class="mock-bar bar-1"></div>
-                                                <div class="mock-bar bar-2"></div>
-                                                <div class="mock-bar bar-3"></div>
-                                                <div class="mock-bar bar-4"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mock-card double">
-                                            <div class="mock-card-header"></div>
-                                            <div class="mock-lines">
-                                                <div class="mock-line line-1"></div>
-                                                <div class="mock-line line-2"></div>
-                                                <div class="mock-line line-3"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mock-table">
-                                        <div class="mock-row header"></div>
-                                        <div class="mock-row"></div>
-                                        <div class="mock-row"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Features Section -->
-            <section id="features" class="features-section">
-                <ThreeBackground />
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-subtitle">Services</span>
-                        <h2 class="section-title">Everything you need to launch</h2>
-                        <p class="section-desc">
-                            From first sketch to live site — TwoDazzle handles design, development,
-                            and everything in between so you don't have to juggle multiple freelancers.
-                        </p>
+            <div class="hero-showcase">
+                <div class="mock-browser mock-browser-back">
+                    <div class="browser-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="browser-address">app.twodazzle.io/analytics</span>
                     </div>
-
-                    <div class="features-grid">
-                        <!-- Feature 1: Design -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                                </svg>
-                            </div>
-                            <h3 class="feature-name">Thoughtful Design</h3>
-                            <p class="feature-desc">
-                                Clean, modern interfaces built around your brand — not generic templates.
-                                Every layout designed with purpose.
-                            </p>
+                    <div class="browser-body">
+                        <div class="mock-sidebar">
+                            <div class="mock-nav-item"></div>
+                            <div class="mock-nav-item active"></div>
+                            <div class="mock-nav-item"></div>
+                            <div class="mock-nav-item"></div>
                         </div>
-
-                        <!-- Feature 2: Development -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <polyline points="16 18 22 12 16 6" />
-                                    <polyline points="8 6 2 12 8 18" />
-                                </svg>
+                        <div class="mock-main">
+                            <div class="mock-chart-container">
+                                <div class="mock-card">
+                                    <div class="mock-card-header"></div>
+                                    <div class="mock-chart-bar-group">
+                                        <div class="mock-bar bar-1"></div>
+                                        <div class="mock-bar bar-2"></div>
+                                        <div class="mock-bar bar-3"></div>
+                                        <div class="mock-bar bar-4"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="feature-name">Solid Development</h3>
-                            <p class="feature-desc">
-                                Fast, reliable builds using modern tools — from simple landing pages
-                                to fully custom interactive experiences.
-                            </p>
                         </div>
-
-                        <!-- Feature 3: Support -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="3" />
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                                </svg>
-                            </div>
-                            <h3 class="feature-name">Ongoing Support</h3>
-                            <p class="feature-desc">
-                                Sites evolve. We stick around after launch for updates, fixes,
-                                and improvements — no disappearing after handoff.
-                            </p>
-                        </div>
-
-                        <!-- Feature 4: Interactive/3D -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                                    <line x1="12" y1="22.08" x2="12" y2="12" />
-                                </svg>
-                            </div>
-                            <h3 class="feature-name">Interactive Experiences</h3>
-                            <p class="feature-desc">
-                                3D visuals, animations, and interactive elements that make your
-                                site feel alive — not just another static page.
-                            </p>
-                        </div>
-
-                        <!-- Feature 5: Responsive -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-                                    <line x1="12" y1="18" x2="12.01" y2="18" />
-                                </svg>
-                            </div>
-                            <h3 class="feature-name">Fully Responsive</h3>
-                            <p class="feature-desc">
-                                Every site works flawlessly across desktop, tablet, and mobile —
-                                tested and polished on every screen size.
-                            </p>
-                        </div>
-
-                        <!-- Feature 6: Brand Identity -->
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
-                                    <circle cx="7.5" cy="10.5" r="0.5" />
-                                    <circle cx="12" cy="7.5" r="0.5" />
-                                    <circle cx="16.5" cy="10.5" r="0.5" />
-                                </svg>
-                            </div>
-                            <h3 class="feature-name">Brand Identity</h3>
-                            <p class="feature-desc">
-                                Color palettes, typography, and visual direction that make your
-                                brand instantly recognizable and consistent.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="features-cta">
-                        <button class="btn-demo" disabled>See Our Demo</button>
                     </div>
                 </div>
-            </section>
 
-            <!-- Benefits / Call to Action Banner -->
-            <section id="benefits" class="cta-banner-section" ref="ctaSection">
-                <div class="astronaut-parallax" :style="{ transform: `translateY(${-parallaxOffset}px)` }">
-                    <div class="astronaut-track" :class="{ 'astro-active': astronautActive }">
-                        <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-                            <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
-                            <g class="astro-flame" opacity="0">
-                                <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
-                                <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
-                                <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
-                            </g>
-                            <g class="astro-hop">
-                                <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                                <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                                <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
-                                <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                                <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                                <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
-                                <circle cx="50" cy="34" r="20" fill="#0A0417" />
-                                <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
-                                <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
-                                <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
-                                <circle cx="30" cy="15" r="2" fill="#FFD34D" />
-                            </g>
+                <div class="mock-browser mock-browser-front">
+                    <div class="browser-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="browser-address">app.twodazzle.io/dashboard</span>
+                    </div>
+                    <div class="browser-body">
+                        <div class="mock-sidebar">
+                            <div class="mock-nav-item active"></div>
+                            <div class="mock-nav-item"></div>
+                            <div class="mock-nav-item"></div>
+                            <div class="mock-nav-item"></div>
+                        </div>
+                        <div class="mock-main">
+                            <div class="mock-chart-container">
+                                <div class="mock-card">
+                                    <div class="mock-card-header"></div>
+                                    <div class="mock-chart-bar-group">
+                                        <div class="mock-bar bar-1"></div>
+                                        <div class="mock-bar bar-2"></div>
+                                        <div class="mock-bar bar-3"></div>
+                                        <div class="mock-bar bar-4"></div>
+                                    </div>
+                                </div>
+                                <div class="mock-card double">
+                                    <div class="mock-card-header"></div>
+                                    <div class="mock-lines">
+                                        <div class="mock-line line-1"></div>
+                                        <div class="mock-line line-2"></div>
+                                        <div class="mock-line line-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mock-table">
+                                <div class="mock-row header"></div>
+                                <div class="mock-row"></div>
+                                <div class="mock-row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <ThreeBackground />
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Services</span>
+                <h2 class="section-title">Everything you need to launch</h2>
+                <p class="section-desc">
+                    From first sketch to live site — TwoDazzle handles design, development,
+                    and everything in between so you don't have to juggle multiple freelancers.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                         </svg>
                     </div>
+                    <h3 class="feature-name">Thoughtful Design</h3>
+                    <p class="feature-desc">
+                        Clean, modern interfaces built around your brand — not generic templates.
+                        Every layout designed with purpose.
+                    </p>
                 </div>
 
-                <div class="container">
-                    <div class="cta-banner">
-                        <h2 class="cta-banner-title">Ready to bring your vision to life?</h2>
-                        <p class="cta-banner-text">
-                            Two devs, one focus — your project. Let's build something that actually stands out.
-                        </p>
-                        <div class="cta-banner-actions">
-                            <a href="#signup" class="btn btn-light">Get Started</a>
-                            <a href="#docs" class="btn btn-outline-light">View Our Work</a>
-                        </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
                     </div>
+                    <h3 class="feature-name">Solid Development</h3>
+                    <p class="feature-desc">
+                        Fast, reliable builds using modern tools — from simple landing pages
+                        to fully custom interactive experiences.
+                    </p>
                 </div>
-            </section>
 
-        </main>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-name">Ongoing Support</h3>
+                    <p class="feature-desc">
+                        Sites evolve. We stick around after launch for updates, fixes,
+                        and improvements — no disappearing after handoff.
+                    </p>
+                </div>
 
-        <!-- Footer Component -->
-        <FooterBar />
-    </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-name">Interactive Experiences</h3>
+                    <p class="feature-desc">
+                        3D visuals, animations, and interactive elements that make your
+                        site feel alive — not just another static page.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                            <line x1="12" y1="18" x2="12.01" y2="18" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-name">Fully Responsive</h3>
+                    <p class="feature-desc">
+                        Every site works flawlessly across desktop, tablet, and mobile —
+                        tested and polished on every screen size.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+                            <circle cx="7.5" cy="10.5" r="0.5" />
+                            <circle cx="12" cy="7.5" r="0.5" />
+                            <circle cx="16.5" cy="10.5" r="0.5" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-name">Brand Identity</h3>
+                    <p class="feature-desc">
+                        Color palettes, typography, and visual direction that make your
+                        brand instantly recognizable and consistent.
+                    </p>
+                </div>
+            </div>
+
+            <div class="features-cta">
+                <button class="btn-demo" disabled>See Our Demo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits / Call to Action Banner -->
+    <section id="benefits" class="cta-banner-section" ref="ctaSection">
+        <div class="astronaut-parallax" :style="{ transform: `translateY(${-parallaxOffset}px)` }">
+            <div class="astronaut-track" :class="{ 'astro-active': astronautActive }">
+                <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
+                    <g class="astro-flame" opacity="0">
+                        <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
+                        <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
+                        <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
+                    </g>
+                    <g class="astro-hop">
+                        <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                        <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                        <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
+                        <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                        <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                        <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
+                        <circle cx="50" cy="34" r="20" fill="#0A0417" />
+                        <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
+                        <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
+                        <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
+                        <circle cx="30" cy="15" r="2" fill="#FFD34D" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="cta-banner">
+                <h2 class="cta-banner-title">Ready to bring your vision to life?</h2>
+                <p class="cta-banner-text">
+                    Two devs, one focus — your project. Let's build something that actually stands out.
+                </p>
+                <div class="cta-banner-actions">
+                    <a href="#signup" class="btn btn-light">Get Started</a>
+                    <a href="#docs" class="btn btn-outline-light">View Our Work</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>
 
 <style>
