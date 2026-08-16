@@ -272,6 +272,30 @@
 
             <!-- Benefits / Call to Action Banner -->
             <section id="benefits" class="cta-banner-section">
+                <div class="astronaut-track">
+                    <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
+                        <g class="astro-flame" opacity="0">
+                            <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
+                            <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
+                            <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
+                        </g>
+                        <g class="astro-hop">
+                            <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                            <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                            <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
+                            <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                            <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                            <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
+                            <circle cx="50" cy="34" r="20" fill="#0A0417" />
+                            <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
+                            <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
+                            <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
+                            <circle cx="30" cy="15" r="2" fill="#FFD34D" />
+                        </g>
+                    </svg>
+                </div>
+
                 <div class="container">
                     <div class="cta-banner">
                         <h2 class="cta-banner-title">Ready to bring your vision to life?</h2>
@@ -279,7 +303,7 @@
                             Two devs, one focus — your project. Let's build something that actually stands out.
                         </p>
                         <div class="cta-banner-actions">
-                            <a href="#signup" class="btn btn-light">Get Started </a>
+                            <a href="#signup" class="btn btn-light">Get Started</a>
                             <a href="#docs" class="btn btn-outline-light">View Our Work</a>
                         </div>
                     </div>
@@ -926,4 +950,159 @@
             position: relative;
             z-index: 1;
         }
+</style>
+
+<style scoped>
+    .cta-banner-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .astronaut-track {
+        position: absolute;
+        bottom: 14px;
+        left: 0;
+        width: 100%;
+        height: 220px;
+        z-index: 2;
+        pointer-events: none;
+        animation: astro-cycle 28s ease-in-out infinite;
+    }
+
+    .astronaut {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    @keyframes astro-cycle {
+        0% {
+            transform: translate(0%, 0px);
+        }
+
+        26% {
+            transform: translate(78%, 0px);
+        }
+
+        29% {
+            transform: translate(78%, 0px) scale(1.05);
+        }
+
+        40% {
+            transform: translate(82%, -170px) scale(0.85);
+        }
+
+        48% {
+            transform: translate(82%, -170px) scale(0.85);
+        }
+
+        59% {
+            transform: translate(78%, 0px) scale(1.05);
+        }
+
+        62% {
+            transform: translate(78%, 0px);
+        }
+
+        88% {
+            transform: translate(0%, 0px);
+        }
+
+        91% {
+            transform: translate(0%, 0px) scale(1.05);
+        }
+
+        96% {
+            transform: translate(-4%, -170px) scale(0.85);
+        }
+
+        99% {
+            transform: translate(-4%, -170px) scale(0.85);
+        }
+
+        100% {
+            transform: translate(0%, 0px) scale(1.05);
+        }
+    }
+
+    .astro-hop {
+        transform-origin: 50px 62px;
+        animation: astro-hop-bounce 28s ease-in-out infinite;
+    }
+
+    @keyframes astro-hop-bounce {
+        0%, 24% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        6%, 18% {
+            transform: translateY(-10px) rotate(-3deg);
+        }
+
+        12% {
+            transform: translateY(0) rotate(3deg);
+        }
+
+        26%, 62% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        66%, 86% {
+            transform: translateY(-10px) rotate(3deg);
+        }
+
+        76% {
+            transform: translateY(0) rotate(-3deg);
+        }
+
+        88%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+    }
+
+    .astro-flame {
+        animation: flame-flicker 28s ease-in-out infinite;
+    }
+
+    @keyframes flame-flicker {
+        0%, 27% {
+            opacity: 0;
+        }
+
+        29%, 59% {
+            opacity: 1;
+        }
+
+        62%, 90% {
+            opacity: 0;
+        }
+
+        92%, 100% {
+            opacity: 1;
+        }
+    }
+
+    .astro-shadow {
+        animation: shadow-fade 28s ease-in-out infinite;
+    }
+
+    @keyframes shadow-fade {
+        0%, 27% {
+            opacity: 0.2;
+        }
+
+        29%, 59% {
+            opacity: 0.05;
+        }
+
+        62%, 90% {
+            opacity: 0.2;
+        }
+
+        92%, 100% {
+            opacity: 0.05;
+        }
+    }
+
+   
 </style>
