@@ -49,7 +49,7 @@
             <section id="hero" class="hero-section">
                 <!-- Background video -->
                 <video class="hero-bg-video" autoplay muted loop playsinline>
-                    <source src="https://twodazzle.com/wp-content/uploads/2026/08/copy_F1BD6054-509C-417B-9A22-BBB84A59D313-4.mov" type="video/mp4" />
+                    <source src="https://slategrey-pig-993603.hostingersite.com/wp-content/uploads/2026/08/copy_F1BD6054-509C-417B-9A22-BBB84A59D313-4.mov" type="video/mp4" />
                 </video>
                 <div class="hero-overlay"></div>
 
@@ -930,6 +930,92 @@
         justify-content: center;
         gap: 1rem;
         flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+        .hero-section {
+            padding: 3rem 0 3.5rem 0;
+        }
+
+        .container {
+            padding: 0 1.25rem;
+        }
+
+        .hero-title {
+            font-size: 2.1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-lead {
+            font-size: 1rem;
+            max-width: 100%;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-large {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .hero-social-proof {
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .brand-logos {
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .kicker {
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .star-dot {
+            display: none;
+        }
+
+        .hero-showcase {
+            height: 220px;
+            margin-top: 1rem;
+        }
+
+        .mock-browser-back {
+            display: none;
+        }
+
+        .mock-browser-front {
+            top: 0;
+        }
+
+        .mock-sidebar {
+            width: 36px;
+        }
+
+        .mock-nav-item {
+            width: 18px;
+            height: 18px;
+        }
+
+        .browser-address {
+            font-size: 0.65rem;
+            padding: 0.15rem 1rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .hero-title {
+            font-size: 1.8rem;
+        }
     }
 </style>
 <style scoped>
