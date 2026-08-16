@@ -1,25 +1,24 @@
 @import './base.css';
 
 #app {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  font-weight: normal;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
 }
 
 a {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.3s;
+    text-decoration: none;
+    color: var(--color-accent);
+    transition: 0.3s;
 }
 
 @media (min-width: 1024px) {
-  body {
-    display: block;
-  }
+    body {
+        display: block;
+    }
 
-  #app {
-    padding: 0;
-  }
+    #app {
+        padding: 0;
+    }
 }
-
