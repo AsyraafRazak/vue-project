@@ -1,9 +1,40 @@
 <script setup>
+    import { ref, onMounted, onBeforeUnmount } from 'vue'
     import NavBar from './components/NavBar.vue'
     import FooterBar from './components/FooterBar.vue'
     import SparkleCursor from './components/SparkleCursor.vue'
     import ThreeBackground from './components/ThreeBackground.vue'
+
+    const ctaSection = ref(null)
+    const astronautActive = ref(false)
+    const parallaxOffset = ref(0)
+
+    function handleScroll() {
+        const el = ctaSection.value
+        if (!el) return
+
+        const rect = el.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+
+        if (rect.top < windowHeight * 0.85 && !astronautActive.value) {
+            astronautActive.value = true
+        }
+
+        const progress = 1 - Math.max(0, Math.min(1, rect.top / windowHeight))
+        parallaxOffset.value = progress * 40
+    }
+
+    onMounted(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        handleScroll()
+    })
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('scroll', handleScroll)
+    })
+
 </script>
+
 
 <template>
     <div class="app-layout">
@@ -271,29 +302,31 @@
             </section>
 
             <!-- Benefits / Call to Action Banner -->
-            <section id="benefits" class="cta-banner-section">
-                <div class="astronaut-track">
-                    <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-                        <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
-                        <g class="astro-flame" opacity="0">
-                            <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
-                            <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
-                            <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
-                        </g>
-                        <g class="astro-hop">
-                            <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                            <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                            <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
-                            <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                            <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                            <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
-                            <circle cx="50" cy="34" r="20" fill="#0A0417" />
-                            <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
-                            <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
-                            <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
-                            <circle cx="30" cy="15" r="2" fill="#FFD34D" />
-                        </g>
-                    </svg>
+            <section id="benefits" class="cta-banner-section" ref="ctaSection">
+                <div class="astronaut-parallax" :style="{ transform: `translateY(${-parallaxOffset}px)` }">
+                    <div class="astronaut-track" :class="{ 'astro-active': astronautActive }">
+                        <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
+                            <g class="astro-flame" opacity="0">
+                                <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
+                                <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
+                                <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
+                            </g>
+                            <g class="astro-hop">
+                                <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                                <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
+                                <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
+                                <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                                <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
+                                <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
+                                <circle cx="50" cy="34" r="20" fill="#0A0417" />
+                                <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
+                                <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
+                                <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
+                                <circle cx="30" cy="15" r="2" fill="#FFD34D" />
+                            </g>
+                        </svg>
+                    </div>
                 </div>
 
                 <div class="container">
@@ -958,7 +991,7 @@
         overflow: hidden;
     }
 
-    .astronaut-track {
+    .astronaut-parallax {
         position: absolute;
         bottom: 14px;
         left: 0;
@@ -966,8 +999,20 @@
         height: 220px;
         z-index: 2;
         pointer-events: none;
-        animation: astro-cycle 28s ease-in-out infinite;
+        transition: transform 0.1s linear;
     }
+
+    .astronaut-track {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+        .astronaut-track.astro-active {
+            animation: astro-cycle 28s ease-in-out infinite;
+        }
 
     .astronaut {
         position: absolute;
@@ -1027,6 +1072,9 @@
 
     .astro-hop {
         transform-origin: 50px 62px;
+    }
+
+    .astronaut-track.astro-active .astro-hop {
         animation: astro-hop-bounce 28s ease-in-out infinite;
     }
 
@@ -1060,7 +1108,7 @@
         }
     }
 
-    .astro-flame {
+    .astronaut-track.astro-active .astro-flame {
         animation: flame-flicker 28s ease-in-out infinite;
     }
 
@@ -1082,7 +1130,7 @@
         }
     }
 
-    .astro-shadow {
+    .astronaut-track.astro-active .astro-shadow {
         animation: shadow-fade 28s ease-in-out infinite;
     }
 
@@ -1103,6 +1151,5 @@
             opacity: 0.05;
         }
     }
-
    
 </style>
