@@ -31,7 +31,7 @@ onUnmounted(() => {
       <!-- Logo -->
       <a href="#" class="logo" @click="closeMenu">
         <span class="logo-dot"></span>
-        <span class="logo-text">SaaS<span>Flow</span></span>
+        <span class="logo-text">Two<span>Dazzle</span></span>
       </a>
 
       <!-- Desktop Nav Links -->
