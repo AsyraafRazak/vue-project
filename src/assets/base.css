@@ -49,3 +49,25 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+/**/cursor
+
+.sparkle-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    animation: sparkle-float 0.7s ease-out forwards;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes sparkle-float {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2) translateX(var(--drift-x)) translateY(-25px);
+    }
+}

@@ -5,6 +5,7 @@
 
 <template>
     <div class="app-layout">
+        <SparkleCursor />
         <!-- Navigation Bar -->
         <NavBar />
 
