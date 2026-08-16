@@ -1,16 +1,17 @@
 <template>
     <section class="contact-section">
+        <SolarSystemBackground :isInteracting="formInteracting" />
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Get in touch</span>
                 <h2 class="section-title">Let's talk about your project</h2>
                 <p class="section-desc">
-                    Tell us a bit about what you're building — we usually reply within a day.
+                    Tell us a bit about what you're building â€” we usually reply within a day.
                 </p>
             </div>
 
             <div class="contact-grid">
-                <form class="contact-form" @submit.prevent="handleSubmit">
+                <form class="contact-form" @submit.prevent="handleSubmit" @focusin="formInteracting = true" @focusout="formInteracting = false">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input id="name" v-model="form.name" type="text" placeholder="Your name" required />
@@ -31,7 +32,7 @@
                     </button>
 
                     <p v-if="submitted" class="form-success">
-                        Thanks for reaching out — we'll get back to you soon.
+                        Thanks for reaching out â€” we'll get back to you soon.
                     </p>
                 </form>
 
@@ -56,6 +57,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import SolarSystemBackground from '../components/SolarSystemBackground.vue'
 
 const form = ref({
   name: '',
@@ -64,6 +66,7 @@ const form = ref({
 })
 
 const submitted = ref(false)
+const formInteracting = ref(false)
 
 function handleSubmit() {
   // TODO: wire this up to an actual email service (e.g. Formspree, EmailJS, or your own backend)
@@ -74,8 +77,15 @@ function handleSubmit() {
 
 <style scoped>
     .contact-section {
+        position: relative;
         padding: 6rem 0;
         background-color: var(--color-background-soft);
+        overflow: hidden;
+    }
+
+    .contact-section .container {
+        position: relative;
+        z-index: 1;
     }
 
     .contact-grid {
@@ -119,6 +129,8 @@ function handleSubmit() {
             color: inherit;
             font-family: inherit;
             resize: vertical;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
             .form-group input:focus,
@@ -143,6 +155,8 @@ function handleSubmit() {
         border: 1px solid var(--td-card-border);
         border-radius: 12px;
         padding: 1.5rem;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
 
         .info-card h3 {
