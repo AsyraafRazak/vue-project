@@ -49,10 +49,10 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-/**/cursor
 
 .sparkle-particle {
     position: fixed;
+    display: inline-block;
     pointer-events: none;
     z-index: 9999;
     user-select: none;
