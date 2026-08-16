@@ -5,18 +5,18 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    plugins: [
+        vue(),
+        vueDevTools(),
+    ],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
     },
-  },
-  server: {
-    watch: {
-      ignored: ['/.vs/'],
+    server: {
+        watch: {
+            ignored: ['**/.vs/**'],
+        },
     },
-  },
 })
