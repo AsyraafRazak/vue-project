@@ -2,6 +2,7 @@
     import NavBar from './components/NavBar.vue'
     import FooterBar from './components/FooterBar.vue'
     import SparkleCursor from './components/SparkleCursor.vue'
+    import ThreeBackground from './components/ThreeBackground.vue'
 </script>
 
 <template>
@@ -33,17 +34,16 @@
                     <div class="hero-content">
                         <span class="kicker">TWO DEVS. ONE VISION.</span>
                         <h1 class="hero-title">
-                            Work smarter2. <br />
-                            <span>Flow faster.</span>
+                            Design bold. <br />
+                            <span>Build Fast.</span>
                         </h1>
                         <p class="hero-lead">
-                            The all-in-one developer automation platform. Design, deploy, and scale your application
-                            workflows in record time with zero infrastructure headaches.
+                            We design and develop websites, apps, and digital products — from clean landing pages to full custom builds. Small team, direct communication, zero fluff.
                         </p>
                         <div class="hero-actions">
-                            <a href="#signup" class="btn btn-primary btn-large">Start Free Trial</a>
+                            <a href="#signup" class="btn btn-primary btn-large">Start Your Project</a>
                             <a href="#features" class="btn btn-secondary btn-large">
-                                Explore Features
+                                See What We Do
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
@@ -51,26 +51,59 @@
                                     <polyline points="12 5 19 12 12 19" />
                                 </svg>
                             </a>
-                        </div>
-                        <div class="hero-social-proof">
-                            <p>Trusted by creators at forward-thinking companies</p>
-                            <div class="brand-logos">
-                                <span class="brand-logo">Vercel</span>
-                                <span class="brand-logo">Stripe</span>
-                                <span class="brand-logo">Figma</span>
-                                <span class="brand-logo">Airbnb</span>
+                            <div class="hero-social-proof">
+                                <p>Built With Tools We Trust</p>
+                                <div class="brand-logos">
+                                    <img src="https://cdn.simpleicons.org/vuedotjs/A99BC2" alt="Vue" class="brand-logo-icon" />
+                                    <img src="https://cdn.simpleicons.org/threedotjs/A99BC2" alt="Three.js" class="brand-logo-icon" />
+                                    <img src="https://cdn.simpleicons.org/figma/A99BC2" alt="Figma" class="brand-logo-icon" />
+                                    <img src="https://cdn.simpleicons.org/wordpress/A99BC2" alt="WordPress" class="brand-logo-icon" />
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Mock Interactive UI Dashboard Showcase -->
                     <div class="hero-showcase">
-                        <div class="mock-browser">
+
+                        <!-- Back card (offset, smaller, dimmer) -->
+                        <div class="mock-browser mock-browser-back">
                             <div class="browser-header">
                                 <span class="dot red"></span>
                                 <span class="dot yellow"></span>
                                 <span class="dot green"></span>
-                                <span class="browser-address">app.saasflow.io/dashboard</span>
+                                <span class="browser-address">app.twodazzle.io/analytics</span>
+                            </div>
+                            <div class="browser-body">
+                                <div class="mock-sidebar">
+                                    <div class="mock-nav-item"></div>
+                                    <div class="mock-nav-item active"></div>
+                                    <div class="mock-nav-item"></div>
+                                    <div class="mock-nav-item"></div>
+                                </div>
+                                <div class="mock-main">
+                                    <div class="mock-chart-container">
+                                        <div class="mock-card">
+                                            <div class="mock-card-header"></div>
+                                            <div class="mock-chart-bar-group">
+                                                <div class="mock-bar bar-1"></div>
+                                                <div class="mock-bar bar-2"></div>
+                                                <div class="mock-bar bar-3"></div>
+                                                <div class="mock-bar bar-4"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Front card (main, your original one) -->
+                        <div class="mock-browser mock-browser-front">
+                            <div class="browser-header">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                                <span class="browser-address">app.twodazzle.io/dashboard</span>
                             </div>
                             <div class="browser-body">
                                 <div class="mock-sidebar">
@@ -107,72 +140,132 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>
 
             <!-- Features Section -->
             <section id="features" class="features-section">
+                <ThreeBackground />
                 <div class="container">
                     <div class="section-header">
                         <span class="section-subtitle">Services</span>
-                        <h2 class="section-title">Everything you need to scale</h2>
+                        <h2 class="section-title">Everything you need to launch</h2>
                         <p class="section-desc">
-                            Stop building backend plumbing. SaaSFlow gives you everything you need
-                            to power production grade pipelines right out of the box.
+                            From first sketch to live site — TwoDazzle handles design, development,
+                            and everything in between so you don't have to juggle multiple freelancers.
                         </p>
                     </div>
 
                     <div class="features-grid">
-                        <!-- Feature 1 -->
+                        <!-- Feature 1: Design -->
                         <div class="feature-card">
                             <div class="feature-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                                 </svg>
                             </div>
-                            <h3 class="feature-name">Lightning Fast Pipelines</h3>
+                            <h3 class="feature-name">Thoughtful Design</h3>
                             <p class="feature-desc">
-                                Execute thousands of background workflows concurrently with
-                                sub-millisecond response and routing speeds.
+                                Clean, modern interfaces built around your brand — not generic templates.
+                                Every layout designed with purpose.
                             </p>
                         </div>
 
-                        <!-- Feature 2 -->
+                        <!-- Feature 2: Development -->
                         <div class="feature-card">
                             <div class="feature-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                    <polyline points="16 18 22 12 16 6" />
+                                    <polyline points="8 6 2 12 8 18" />
                                 </svg>
                             </div>
-                            <h3 class="feature-name">Bank-Grade Security</h3>
+                            <h3 class="feature-name">Solid Development</h3>
                             <p class="feature-desc">
-                                All user transactions and database schemas are end-to-end encrypted
-                                under AES-256 standard protocols.
+                                Fast, reliable builds using modern tools — from simple landing pages
+                                to fully custom interactive experiences.
                             </p>
                         </div>
 
-                        <!-- Feature 3 -->
+                        <!-- Feature 3: Support -->
                         <div class="feature-card">
                             <div class="feature-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round">
-                                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-                                    <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                                 </svg>
                             </div>
-                            <h3 class="feature-name">Realtime Diagnostics</h3>
+                            <h3 class="feature-name">Ongoing Support</h3>
                             <p class="feature-desc">
-                                Monitor pipeline health metrics, latency logs, and memory
-                                performance dashboards dynamically in real-time.
+                                Sites evolve. We stick around after launch for updates, fixes,
+                                and improvements — no disappearing after handoff.
                             </p>
                         </div>
+
+                        <!-- Feature 4: Interactive/3D -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                                </svg>
+                            </div>
+                            <h3 class="feature-name">Interactive Experiences</h3>
+                            <p class="feature-desc">
+                                3D visuals, animations, and interactive elements that make your
+                                site feel alive — not just another static page.
+                            </p>
+                        </div>
+
+                        <!-- Feature 5: Responsive -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" />
+                                </svg>
+                            </div>
+                            <h3 class="feature-name">Fully Responsive</h3>
+                            <p class="feature-desc">
+                                Every site works flawlessly across desktop, tablet, and mobile —
+                                tested and polished on every screen size.
+                            </p>
+                        </div>
+
+                        <!-- Feature 6: Brand Identity -->
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+                                    <circle cx="7.5" cy="10.5" r="0.5" />
+                                    <circle cx="12" cy="7.5" r="0.5" />
+                                    <circle cx="16.5" cy="10.5" r="0.5" />
+                                </svg>
+                            </div>
+                            <h3 class="feature-name">Brand Identity</h3>
+                            <p class="feature-desc">
+                                Color palettes, typography, and visual direction that make your
+                                brand instantly recognizable and consistent.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="features-cta">
+                        <button class="btn-demo" disabled>See Our Demo</button>
                     </div>
                 </div>
             </section>
@@ -181,14 +274,13 @@
             <section id="benefits" class="cta-banner-section">
                 <div class="container">
                     <div class="cta-banner">
-                        <h2 class="cta-banner-title">Ready to optimize your deployment pipeline?</h2>
+                        <h2 class="cta-banner-title">Ready to bring your vision to life?</h2>
                         <p class="cta-banner-text">
-                            Join thousands of software engineers building faster products today.
-                            No credit card required.
+                            Two devs, one focus — your project. Let's build something that actually stands out.
                         </p>
                         <div class="cta-banner-actions">
-                            <a href="#signup" class="btn btn-light">Get Started Free</a>
-                            <a href="#docs" class="btn btn-outline-light">Read Documentation</a>
+                            <a href="#signup" class="btn btn-light">Get Started </a>
+                            <a href="#docs" class="btn btn-outline-light">View Our Work</a>
                         </div>
                     </div>
                 </div>
@@ -782,4 +874,56 @@
         gap: 1rem;
         flex-wrap: wrap;
     }
+</style>
+<style scoped>
+    .brand-logo-icon {
+        height: 24px;
+        width: auto;
+        opacity: 0.6;
+    }
+</style>
+<style scoped>
+    .hero-showcase {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        overflow: visible;
+    }
+
+    .mock-browser {
+        position: absolute;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #12081F;
+        border: 1px solid rgba(192, 132, 252, 0.2);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .mock-browser-front {
+        top: 20px;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .mock-browser-back {
+        top: -100px;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+        opacity: 0.5;
+        transform: scale(0.95) translateX(30%);
+        filter: blur(0.5px);
+    }
+</style>
+<style scoped>
+    .features-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .features-section .container {
+            position: relative;
+            z-index: 1;
+        }
 </style>
