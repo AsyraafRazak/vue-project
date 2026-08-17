@@ -1,5 +1,6 @@
 <script setup>
     import { ref, onMounted, onUnmounted } from 'vue'
+    import RocketScene from './Rocketscene.vue'
 
     const isMenuOpen = ref(false)
     const isScrolled = ref(false)
@@ -30,14 +31,16 @@
         <div class="nav-container">
             <!-- Logo -->
             <router-link to="/" class="logo" @click="closeMenu">
-                <span class="logo-dot"></span>
+                <span class="logo-rocket">
+                    <RocketScene />
+                </span>
                 <span class="logo-text">Two<span>Dazzle</span></span>
             </router-link>
 
             <!-- Desktop Nav Links -->
             <ul class="nav-links">
                 <li><a href="/#features" class="nav-link">Features</a></li>
-                <li><a href="/#benefits" class="nav-link">Benefits</a></li>
+                <li><router-link to="/demo" class="nav-link">Demo</router-link></li>
                 <li><a href="/#pricing" class="nav-link">Pricing</a></li>
                 <li><router-link to="/contact" class="nav-link">Contact</router-link></li>
             </ul>
@@ -129,6 +132,15 @@
 
     .logo-text span {
         color: var(--td-accent);
+    }
+
+    .logo-rocket {
+        position: relative;
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        overflow: hidden;
+        pointer-events: none;
     }
 
     .nav-links {
