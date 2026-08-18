@@ -27,12 +27,15 @@
                         <textarea id="message" v-model="form.message" rows="6" placeholder="Tell us about your project..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-large" :disabled="submitted">
-                        {{ submitted ? 'Message sent' : 'Send message' }}
+                    <button type="submit" class="btn btn-primary btn-large" :disabled="submitted || submitting">
+                        {{ submitting ? 'Sending...' : submitted ? 'Message sent' : 'Send message' }}
                     </button>
 
                     <p v-if="submitted" class="form-success">
                         Thanks for reaching out — we'll get back to you soon.
+                    </p>
+                    <p v-if="errorMessage" class="form-error">
+                        {{ errorMessage }}
                     </p>
                 </form>
 
@@ -66,12 +69,34 @@ const form = ref({
 })
 
 const submitted = ref(false)
+const submitting = ref(false)
+const errorMessage = ref('')
 const formInteracting = ref(false)
 
-function handleSubmit() {
-  // TODO: wire this up to an actual email service (e.g. Formspree, EmailJS, or your own backend)
-  console.log('Form submitted:', form.value)
-  submitted.value = true
+async function handleSubmit() {
+  submitting.value = true
+  errorMessage.value = ''
+
+  try {
+    const response = await fetch('/api/send-mail.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form.value)
+    })
+
+    const result = await response.json()
+
+    if (result.success) {
+      submitted.value = true
+      form.value = { name: '', email: '', message: '' }
+    } else {
+      errorMessage.value = result.message || 'Something went wrong. Please try again.'
+    }
+  } catch (err) {
+    errorMessage.value = 'Could not reach the server. Please try again later.'
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -142,6 +167,11 @@ function handleSubmit() {
     .form-success {
         font-size: 0.9rem;
         color: var(--td-accent);
+    }
+
+    .form-error {
+        font-size: 0.9rem;
+        color: #f43f5e;
     }
 
     .contact-info {
