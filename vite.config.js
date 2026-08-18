@@ -18,5 +18,13 @@ export default defineConfig({
         watch: {
             ignored: ['**/.vs/**'],
         },
+        proxy: {
+            // Forwards /api requests to XAMPP during development
+            '/api': {
+                target: 'http://localhost',
+                changeOrigin: true,
+                rewrite: (path) => '/vue%20project' + path
+            }
+        }
     },
 })
