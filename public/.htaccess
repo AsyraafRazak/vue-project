@@ -1,0 +1,15 @@
+# Handle Vue SPA routing — all routes go to index.html
+# EXCEPT the /api/ folder which must reach PHP directly
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Let /api/ requests pass through to PHP — do not redirect
+    RewriteRule ^api/ - [L]
+
+    # Redirect everything else to index.html for Vue router
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [L]
+</IfModule>
