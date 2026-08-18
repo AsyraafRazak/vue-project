@@ -112,7 +112,7 @@
         flameCore.rotation.x = Math.PI
         rocketGroup.add(flameCore)
 
-        // Smoke puffs — small pool of sprites recycled continuously
+        // Smoke puffs - small pool of sprites recycled continuously
         const smokeTexture = makeSmokeTexture()
         smokeGroup = new THREE.Group()
         rocketGroup.add(smokeGroup)
@@ -172,7 +172,7 @@
             const coreFlicker = 1 + Math.sin(t * 24) * 0.2
             flameCore.scale.set(coreFlicker, coreFlicker, coreFlicker)
 
-            // Update smoke puffs — rise, drift, fade, then recycle
+            // Update smoke puffs - rise, drift, fade, then recycle
             smokeParticles.forEach(p => {
                 p.life += dt * p.speed
                 if (p.life > 1) {
