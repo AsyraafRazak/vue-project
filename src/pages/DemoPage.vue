@@ -59,10 +59,11 @@
             tags: ['Vue', 'Three.js', 'Design']
         },
         {
-            name: 'AVAC Training',
-            desc: 'Aviation training company site with custom dark navy/cyan design system.',
-            url: 'https://avactraining.clearwisdom.com.my',
-            tags: ['WordPress', 'Elementor']
+            name: 'TwoDazzle',
+            desc: 'Our own studio site — galaxy-themed portfolio built with Vue and Three.js.',
+            url: 'https://twodazzle.com',
+            tags: ['Vue', 'Three.js', 'Design']
+
         }
         // Add more projects here as you build them
     ]
@@ -72,7 +73,7 @@
     .demo-section {
         position: relative;
         padding: 6rem 0;
-        background-color: var(--td-bg-page);
+        background-color: var(--color-background-soft);
         overflow: hidden;
     }
 
