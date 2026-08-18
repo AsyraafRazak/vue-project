@@ -89,7 +89,7 @@ try {
     $mail->SMTPAuth   = true;
     $mail->Username   = MAIL_SMTP_USERNAME;
     $mail->Password   = MAIL_SMTP_PASSWORD;
-    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port       = MAIL_SMTP_PORT;
 
     // Disable SSL verification on local XAMPP (no CA certs available)
