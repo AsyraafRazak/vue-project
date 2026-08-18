@@ -57,7 +57,9 @@ try {
     $mail->SMTPAuth   = true;
     $mail->Username   = MAIL_SMTP_USERNAME;
     $mail->Password   = MAIL_SMTP_PASSWORD;
-    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = MAIL_SMTP_PORT === 465
+        ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+        : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = MAIL_SMTP_PORT;
     $mail->SMTPDebug  = 0;
 

@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // ── Load config ───────────────────────────────────────────────────────────────
 $localPath     = dirname(__DIR__, 2) . '/config.php';  // XAMPP: htdocs/config.php
-$hostingerPath = dirname(__DIR__, 3) . '/config.php';  // Hostinger: /home/user/config.php
+$hostingerPath = dirname(__DIR__, 3) . '/config.php';  // Hostinger: /home/user/domains/config.php
 
 if (file_exists($localPath)) {
     require_once $localPath;
@@ -89,7 +89,9 @@ try {
     $mail->SMTPAuth   = true;
     $mail->Username   = MAIL_SMTP_USERNAME;
     $mail->Password   = MAIL_SMTP_PASSWORD;
-    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+    $mail->SMTPSecure = MAIL_SMTP_PORT === 465
+        ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+        : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = MAIL_SMTP_PORT;
 
     // Disable SSL verification on local XAMPP (no CA certs available)
