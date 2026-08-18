@@ -63,7 +63,7 @@
             <div v-if="isMenuOpen" class="mobile-drawer">
                 <ul class="mobile-nav-links">
                     <li><a href="/#features" class="mobile-nav-link" @click="closeMenu">Features</a></li>
-                    <li><router-link to="/demo" class="nav-link">Demo</router-link></li>
+                    <li><router-link to="/demo" class="mobile-nav-link" @click="closeMenu">Demo</router-link></li>
                     <li><router-link to="/contact" class="mobile-nav-link" @click="closeMenu">Contact</router-link></li>
                     <li class="mobile-cta-li">
                         <router-link to="/contact" class="btn btn-primary mobile-cta" @click="closeMenu">Get Started</router-link>
