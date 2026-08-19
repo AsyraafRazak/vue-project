@@ -1,6 +1,7 @@
 ﻿<script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import ThreeBackground from '../components/ThreeBackground.vue'
+import Astronaut from '../components/Astronaut.vue'
 
 const ctaSection = ref(null)
 const astronautActive = ref(false)
@@ -270,52 +271,44 @@ onBeforeUnmount(() => {
             </div>
 
             <div class="features-cta">
-                <button class="btn-demo" disabled>See Our Demo</button>
+               
             </div>
         </div>
     </section>
 
     <!-- Benefits / Call to Action Banner -->
-    <section id="benefits" class="cta-banner-section" ref="ctaSection">
-        <div class="astronaut-parallax" :style="{ transform: `translateY(${-parallaxOffset}px)` }">
-            <div class="astronaut-track" :class="{ 'astro-active': astronautActive }">
-                <svg class="astronaut" width="110" height="110" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="50" cy="104" rx="13" ry="3" fill="#7C3AED" opacity="0.2" class="astro-shadow" />
-                    <g class="astro-flame" opacity="0">
-                        <path d="M38 80 Q50 108 62 80 Z" fill="#7C3AED" opacity="0.5" />
-                        <path d="M41 80 Q50 102 59 80 Z" fill="#FFD34D" />
-                        <path d="M44 80 Q50 96 56 80 Z" fill="#fff" />
-                    </g>
-                    <g class="astro-hop">
-                        <rect x="34" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                        <rect x="58" y="66" width="8" height="16" rx="4" fill="#C084FC" />
-                        <ellipse cx="50" cy="62" rx="20" ry="16" fill="#F1EFE8" />
-                        <rect x="26" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                        <rect x="65" y="46" width="9" height="15" rx="4" fill="#C084FC" />
-                        <circle cx="50" cy="34" r="27" fill="#F1EFE8" />
-                        <circle cx="50" cy="34" r="20" fill="#0A0417" />
-                        <circle cx="44" cy="30" r="4.5" fill="#C084FC" />
-                        <circle cx="45.5" cy="28.5" r="1.5" fill="#fff" />
-                        <circle cx="50" cy="34" r="27" fill="none" stroke="#7C3AED" stroke-width="2.5" />
-                        <circle cx="30" cy="15" r="2" fill="#FFD34D" />
-                    </g>
-                </svg>
-            </div>
-        </div>
+   <!-- Why Us Section -->
+<!-- Why Us Section -->
+<!-- Why Us Section -->
+<section id="why-us" class="why-us-section" ref="ctaSection">
+    <!-- Full-bleed 3D layer, sits behind the text -->
+    <div class="why-us-scene">
+        <Astronaut height="100%" />
+    </div>
 
-        <div class="container">
-            <div class="cta-banner">
-                <h2 class="cta-banner-title">Ready to bring your vision to life?</h2>
-                <p class="cta-banner-text">
-                    Two devs, one focus — your project. Let's build something that actually stands out.
-                </p>
-                <div class="cta-banner-actions">
-                    <a href="#signup" class="btn btn-light">Get Started</a>
-                    <a href="#docs" class="btn btn-outline-light">View Our Work</a>
-                </div>
+    <div class="container why-us-grid">
+        <div class="why-us-content">
+            <span class="section-subtitle">Why Us</span>
+            <h2 class="why-us-title">Two devs, one focus — your project</h2>
+            <p class="why-us-text">
+                No account managers, no hand-offs between teams. You talk directly
+                to the people building your site, from first sketch to launch and beyond.
+            </p>
+
+            <ul class="why-us-list">
+                <li><span class="why-us-check">✓</span> Direct access to the developers, not a middleman</li>
+                <li><span class="why-us-check">✓</span> Small by design — fewer clients means more attention on yours</li>
+                <li><span class="why-us-check">✓</span> 3D & interactive work most agencies can't touch</li>
+                <li><span class="why-us-check">✓</span> We stick around after launch — real support, not silence</li>
+            </ul>
+
+            <div class="why-us-actions">
+               
+               <router-link to="/demo" class="btn btn-primary btn-large">View Our Demo</router-link>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 </template>
 
 <style>
@@ -985,6 +978,59 @@ onBeforeUnmount(() => {
             font-size: 1.8rem;
         }
     }
+
+ .why-us-section {
+      padding: 60px 0;      /* was 100px 0 */
+    background: #0A0417;
+    position: relative;
+    overflow: hidden;
+    min-height: 480px;  
+}
+
+.why-us-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.why-us-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    pointer-events: none;
+    min-height: 640px; /* keeps the grid itself matching the section, so content
+                           stays vertically centered in that space rather than
+                           collapsing to just its own content height */
+    align-content: center;
+}
+
+.why-us-content {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.why-us-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 12px;
+}
+
+.why-us-actions a {
+    pointer-events: auto;
+}
+
+@media (max-width: 900px) {
+    .why-us-section {
+        min-height: 520px;
+    }
+
+    .why-us-grid {
+        min-height: 520px;
+    }
+}
 </style>
 <style scoped>
     .brand-logo-icon {
