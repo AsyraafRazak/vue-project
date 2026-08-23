@@ -59,11 +59,10 @@
             tags: ['Vue', 'Three.js', 'Design']
         },
         {
-            name: 'TwoDazzle',
-            desc: 'Our own studio site — galaxy-themed portfolio built with Vue and Three.js.',
-            url: 'https://twodazzle.com',
-            tags: ['Vue', 'Three.js', 'Design']
-
+            name: 'Aroma',
+            desc: 'Café & F&B starter template — warm, kraft-paper inspired design with an interactive menu, gallery, and loyalty card built in Vue.',
+            url: 'https://seagreen-boar-725110.hostingersite.com/', // swap for Aroma's own preview link once deployed
+            tags: ['Vue', 'Template', 'F&B']
         }
         // Add more projects here as you build them
     ]
