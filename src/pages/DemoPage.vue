@@ -69,6 +69,12 @@
             desc: 'Aquarium & aquascaping shop — nano fish, live plants, and a working stocking calculator built in Vue.',
             url: 'https://floralwhite-yak-608385.hostingersite.com/',
             tags: ['Vue', 'Template', 'Aquarium']
+        },
+        {
+            name: 'Ember & Flour',
+            desc: 'Bakery & café starter template — paper-ticket, chalkboard-menu design with a receipt-style bake schedule and order-ahead form built in Vue.',
+            url: 'https://lightgoldenrodyellow-fly-598753.hostingersite.com/',
+            tags: ['Vue', 'Template', 'F&B']
         }
         // Add more projects here as you build them
     
