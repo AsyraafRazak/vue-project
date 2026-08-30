@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Add Project — TwoDazzle Admin</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0A0417;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            margin: 0;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: #150a2e;
+            border: 1px solid rgba(192, 132, 252, 0.25);
+            border-radius: 14px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            margin: 0 0 1.5rem;
+            color: #C084FC;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin: 1rem 0 0.35rem;
+            opacity: 0.8;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.65rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(192, 132, 252, 0.25);
+            background: #0A0417;
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+            input:focus, textarea:focus {
+                outline: none;
+                border-color: #7C3AED;
+            }
+
+        button {
+            width: 100%;
+            margin-top: 1.75rem;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 9999px;
+            background: #7C3AED;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+        #status {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+            #status.success {
+                color: #4ade80;
+            }
+
+            #status.error {
+                color: #f87171;
+            }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Add a Project</h1>
+        <form id="projectForm">
+            <label for="password">Admin Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="name">Project Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="desc">Description</label>
+            <textarea id="desc" name="desc" required></textarea>
+
+            <label for="url">Live URL</label>
+            <input type="url" id="url" name="url" placeholder="https://" required>
+
+            <label for="tags">Tags (comma-separated)</label>
+            <input type="text" id="tags" name="tags" placeholder="Vue, Template, F&B">
+
+            <label for="image">Screenshot (optional, JPG/PNG/WEBP, max 5MB)</label>
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+
+            <button type="submit" id="submitBtn">Add Project</button>
+            <div id="status"></div>
+        </form>
+    </div>
+
+    <script>
+    const form = document.getElementById('projectForm');
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Change this to your deployed API path if different
+    const API_URL = '/api/upload-project.php';
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        statusEl.textContent = 'Uploading...';
+        statusEl.className = '';
+
+        const formData = new FormData(form);
+
+        try {
+            const res = await fetch(API_URL, { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                statusEl.textContent = 'Project added successfully.';
+                statusEl.className = 'success';
+                form.reset();
+            } else {
+                statusEl.textContent = data.message || 'Something went wrong.';
+                statusEl.className = 'error';
+            }
+        } catch (err) {
+            statusEl.textContent = 'Network error. Please try again.';
+            statusEl.className = 'error';
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+    </script>
+</body>
+</html>
