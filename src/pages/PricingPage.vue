@@ -8,7 +8,7 @@
                 <p class="section-desc">
                     Pick a static site if your content rarely changes, or a managed backend
                     if you want to update things yourself. Every quote is scoped to what
-                    you actually need — these are starting points, not the ceiling.
+                    you actually need - these are starting points, not the ceiling.
                 </p>
             </div>
 
@@ -54,7 +54,7 @@
             </div>
 
             <p class="pricing__footnote">
-                Prices depend on scope — page count, content you provide, and any custom
+                Prices depend on scope - page count, content you provide, and any custom
                 design work. We'll confirm an exact number before anything starts.
             </p>
 
@@ -62,7 +62,7 @@
                 <p class="pricing__hostNoteTitle">Domain and hosting aren't included</p>
                 <p class="pricing__hostNoteBody">
                     These prices cover design, build, and deployment only. You'll need
-                    your own domain (from ~RM30/year) and hosting (from ~RM30/month) —
+                    your own domain (from ~RM30/year) and hosting (from ~RM30/month) -
                     or we can help you set these up if you don't have them yet.
                 </p>
             </div>
@@ -81,7 +81,7 @@
             name: 'Starter',
             scope: '1 page',
             from: 500,
-            description: 'A single scrolling page — everything your visitors need in one place.',
+            description: 'A single scrolling page - everything your visitors need in one place.',
             includes: [
                 'Hero, about, and contact sections',
                 'Mobile-friendly layout',
@@ -121,7 +121,7 @@
             name: 'Basic CMS',
             scope: '1 editable section',
             from: 1500,
-            description: 'Update one part of your site yourself — no code, no waiting on us.',
+            description: 'Update one part of your site yourself - no code, no waiting on us.',
             includes: [
                 'Admin login',
                 'Add, edit, and delete entries',
