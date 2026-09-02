@@ -41,7 +41,7 @@
             <ul class="nav-links">
                 <li><a href="/#features" class="nav-link">Features</a></li>
                 <li><router-link to="/demo" class="nav-link">Demo</router-link></li>
-                <li><a href="/#pricing" class="nav-link">Pricing</a></li>
+                <li><router-link to="/pricing" class="nav-link">Pricing</router-link></li>
             </ul>
 
             <!-- Desktop CTA Button -->
@@ -63,6 +63,8 @@
                 <ul class="mobile-nav-links">
                     <li><a href="/#features" class="mobile-nav-link" @click="closeMenu">Features</a></li>
                     <li><router-link to="/demo" class="mobile-nav-link" @click="closeMenu">Demo</router-link></li>
+                    <li><router-link to="/pricing" class="mobile-nav-link" @click="closeMenu">Pricing</router-link></li>
+
                     <li class="mobile-cta-li">
                         <router-link to="/contact" class="btn btn-primary mobile-cta" @click="closeMenu">Contact Us</router-link>
                     </li>

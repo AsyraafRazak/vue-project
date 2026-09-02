@@ -59,45 +59,59 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import SolarSystemBackground from '../components/SolarSystemBackground.vue'
+    import { ref } from 'vue'
+    import { useRoute } from 'vue-router'
+    import SolarSystemBackground from '../components/SolarSystemBackground.vue'
 
-const form = ref({
-  name: '',
-  email: '',
-  message: ''
-})
+    const route = useRoute()
 
-const submitted = ref(false)
-const submitting = ref(false)
-const errorMessage = ref('')
-const formInteracting = ref(false)
+    function buildPrefillMessage() {
+        const { plan, price, scope, track } = route.query
+        if (!plan) return ''
 
-async function handleSubmit() {
-  submitting.value = true
-  errorMessage.value = ''
+        const trackLabel = track === 'backend' ? 'backend/CMS' : 'static site'
+        const scopePart = scope ? ` (${scope})` : ''
+        const pricePart = price ? ` - starting from RM${price}` : ''
 
-  try {
-    const response = await fetch('/api/send-mail.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value)
+        return `Hi, I'm interested in the ${plan} plan${scopePart} under the ${trackLabel} pricing${pricePart}. Here's a bit about what I'm building: `
+    }
+
+    const form = ref({
+        name: '',
+        email: '',
+        message: buildPrefillMessage()
     })
 
-    const result = await response.json()
+    const submitted = ref(false)
+    const submitting = ref(false)
+    const errorMessage = ref('')
+    const formInteracting = ref(false)
 
-    if (result.success) {
-      submitted.value = true
-      form.value = { name: '', email: '', message: '' }
-    } else {
-      errorMessage.value = result.message || 'Something went wrong. Please try again.'
+    async function handleSubmit() {
+        submitting.value = true
+        errorMessage.value = ''
+
+        try {
+            const response = await fetch('/api/send-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form.value)
+            })
+
+            const result = await response.json()
+
+            if (result.success) {
+                submitted.value = true
+                form.value = { name: '', email: '', message: '' }
+            } else {
+                errorMessage.value = result.message || 'Something went wrong. Please try again.'
+            }
+        } catch (err) {
+            errorMessage.value = 'Could not reach the server. Please try again later.'
+        } finally {
+            submitting.value = false
+        }
     }
-  } catch (err) {
-    errorMessage.value = 'Could not reach the server. Please try again later.'
-  } finally {
-    submitting.value = false
-  }
-}
 </script>
 
 <style scoped>
@@ -108,10 +122,10 @@ async function handleSubmit() {
         overflow: hidden;
     }
 
-    .contact-section .container {
-        position: relative;
-        z-index: 1;
-    }
+        .contact-section .container {
+            position: relative;
+            z-index: 1;
+        }
 
     .contact-grid {
         display: grid;

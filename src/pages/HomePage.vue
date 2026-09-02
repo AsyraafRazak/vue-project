@@ -517,6 +517,10 @@ onBeforeUnmount(() => {
             text-align: center;
             gap: 3rem;
         }
+
+        .hero-showcase {
+            display: none;
+        }
     }
 
     .hero-content {
@@ -1024,11 +1028,23 @@ onBeforeUnmount(() => {
 
 @media (max-width: 900px) {
     .why-us-section {
-        min-height: 520px;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .why-us-scene {
+        position: relative;
+        inset: auto;
+        order: 2;
+        width: 100%;
+        height: 280px;
     }
 
     .why-us-grid {
-        min-height: 520px;
+        order: 1;
+        min-height: auto;
+        pointer-events: auto;
     }
 }
 </style>

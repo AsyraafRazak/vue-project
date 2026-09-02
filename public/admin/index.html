@@ -15,9 +15,11 @@
             background: #0A0417;
             color: #fff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: 3rem 1.5rem;
             margin: 0;
+            gap: 2rem;
         }
 
         .card {
@@ -64,13 +66,8 @@
             }
 
         button {
-            width: 100%;
-            margin-top: 1.75rem;
-            padding: 0.75rem;
             border: none;
             border-radius: 9999px;
-            background: #7C3AED;
-            color: #fff;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
@@ -80,6 +77,14 @@
                 opacity: 0.5;
                 cursor: not-allowed;
             }
+
+        .btn-primary {
+            width: 100%;
+            margin-top: 1.75rem;
+            padding: 0.75rem;
+            background: #7C3AED;
+            color: #fff;
+        }
 
         #status {
             margin-top: 1rem;
@@ -95,9 +100,85 @@
             #status.error {
                 color: #f87171;
             }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(192, 132, 252, 0.12);
+        }
+
+            .list-item:last-child {
+                border-bottom: none;
+            }
+
+        .list-item-info {
+            min-width: 0;
+        }
+
+        .list-item-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .list-item-url {
+            font-size: 0.75rem;
+            opacity: 0.55;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .btn-delete {
+            flex-shrink: 0;
+            padding: 0.45rem 0.9rem;
+            background: rgba(248, 113, 113, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            font-size: 0.8rem;
+        }
+
+            .btn-delete:hover:not(:disabled) {
+                background: rgba(248, 113, 113, 0.25);
+            }
+
+        .list-empty {
+            opacity: 0.5;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .note {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            text-align: center;
+            margin-top: -0.5rem;
+        }
+
+        #listStatus {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+            #listStatus.success {
+                color: #4ade80;
+            }
+
+            #listStatus.error {
+                color: #f87171;
+            }
     </style>
 </head>
 <body>
+
     <div class="card">
         <h1>Add a Project</h1>
         <form id="projectForm">
@@ -119,46 +200,134 @@
             <label for="image">Screenshot (optional, JPG/PNG/WEBP, max 5MB)</label>
             <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
 
-            <button type="submit" id="submitBtn">Add Project</button>
+            <button type="submit" id="submitBtn" class="btn-primary">Add Project</button>
             <div id="status"></div>
         </form>
     </div>
 
+    <div class="card">
+        <h1>Existing Projects</h1>
+        <p class="note">Password above is reused for deleting below.</p>
+        <div id="projectList">
+            <p class="list-empty">Loading...</p>
+        </div>
+        <div id="listStatus"></div>
+    </div>
+
     <script>
-    const form = document.getElementById('projectForm');
-    const statusEl = document.getElementById('status');
-    const submitBtn = document.getElementById('submitBtn');
+        // Same endpoints as before — nothing changed on the PHP side except the new delete-project.php
+        const API_PROJECTS = '/api/projects.php';
+        const API_UPLOAD = '/api/upload-project.php';
+        const API_DELETE = '/api/delete-project.php';
 
-    // Change this to your deployed API path if different
-    const API_URL = '/api/upload-project.php';
+        const form = document.getElementById('projectForm');
+        const statusEl = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
+        const passwordInput = document.getElementById('password');
+        const listEl = document.getElementById('projectList');
+        const listStatusEl = document.getElementById('listStatus');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        submitBtn.disabled = true;
-        statusEl.textContent = 'Uploading...';
-        statusEl.className = '';
+        async function loadProjects() {
+            listEl.innerHTML = '<p class="list-empty">Loading...</p>';
+            try {
+                const res = await fetch(API_PROJECTS);
+                const data = await res.json();
 
-        const formData = new FormData(form);
+                if (!Array.isArray(data) || data.length === 0) {
+                    listEl.innerHTML = '<p class="list-empty">No projects yet.</p>';
+                    return;
+                }
 
-        try {
-            const res = await fetch(API_URL, { method: 'POST', body: formData });
-            const data = await res.json();
-
-            if (data.success) {
-                statusEl.textContent = 'Project added successfully.';
-                statusEl.className = 'success';
-                form.reset();
-            } else {
-                statusEl.textContent = data.message || 'Something went wrong.';
-                statusEl.className = 'error';
+                listEl.innerHTML = '';
+                data.forEach((project) => {
+                    const row = document.createElement('div');
+                    row.className = 'list-item';
+                    row.innerHTML = `
+                        <div class="list-item-info">
+                            <div class="list-item-name"></div>
+                            <div class="list-item-url"></div>
+                        </div>
+                        <button class="btn-delete" type="button">Delete</button>
+                    `;
+                    row.querySelector('.list-item-name').textContent = project.name;
+                    row.querySelector('.list-item-url').textContent = project.url;
+                    row.querySelector('.btn-delete').addEventListener('click', () => deleteProject(project.name));
+                    listEl.appendChild(row);
+                });
+            } catch (err) {
+                listEl.innerHTML = '<p class="list-empty">Failed to load projects.</p>';
             }
-        } catch (err) {
-            statusEl.textContent = 'Network error. Please try again.';
-            statusEl.className = 'error';
-        } finally {
-            submitBtn.disabled = false;
         }
-    });
+
+        async function deleteProject(name) {
+            const password = passwordInput.value;
+            if (!password) {
+                listStatusEl.textContent = 'Enter the admin password above first.';
+                listStatusEl.className = 'error';
+                return;
+            }
+
+            if (!confirm(`Delete "${name}"? This cannot be undone.`)) {
+                return;
+            }
+
+            listStatusEl.textContent = 'Deleting...';
+            listStatusEl.className = '';
+
+            try {
+                const res = await fetch(API_DELETE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, name })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    listStatusEl.textContent = 'Project deleted.';
+                    listStatusEl.className = 'success';
+                    loadProjects();
+                } else {
+                    listStatusEl.textContent = data.message || 'Failed to delete.';
+                    listStatusEl.className = 'error';
+                }
+            } catch (err) {
+                listStatusEl.textContent = 'Network error. Please try again.';
+                listStatusEl.className = 'error';
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            statusEl.textContent = 'Uploading...';
+            statusEl.className = '';
+
+            const formData = new FormData(form);
+
+            try {
+                const res = await fetch(API_UPLOAD, { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.success) {
+                    statusEl.textContent = 'Project added successfully.';
+                    statusEl.className = 'success';
+                    const savedPassword = passwordInput.value;
+                    form.reset();
+                    passwordInput.value = savedPassword;
+                    loadProjects();
+                } else {
+                    statusEl.textContent = data.message || 'Something went wrong.';
+                    statusEl.className = 'error';
+                }
+            } catch (err) {
+                statusEl.textContent = 'Network error. Please try again.';
+                statusEl.className = 'error';
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        loadProjects();
     </script>
 </body>
 </html>
