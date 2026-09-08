@@ -476,7 +476,8 @@ onBeforeUnmount(() => {
     /* Hero Section styles */
     .hero-section {
         position: relative;
-        padding: 5rem 0 6rem 0;
+        margin-top: -75px;
+        padding: calc(5rem + 75px) 0 6rem 0;
         overflow: hidden;
         background: var(--td-bg-page);
     }

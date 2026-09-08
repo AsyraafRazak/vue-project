@@ -1,9 +1,16 @@
-<script setup>
+﻿<script setup>
     import { ref, onMounted, onUnmounted } from 'vue'
+    import { useRouter } from 'vue-router'
     import RocketScene from './Rocketscene.vue'
+
+    const router = useRouter()
 
     const isMenuOpen = ref(false)
     const isScrolled = ref(false)
+    const rocketClicks = ref(0)
+    let rocketClickTimer = null
+
+    const EASTER_EGG_THRESHOLD = 5
 
     const toggleMenu = () => {
         isMenuOpen.value = !isMenuOpen.value
@@ -17,12 +24,34 @@
         isScrolled.value = window.scrollY > 20
     }
 
+    const handleRocketClick = (event) => {
+        // Intercepts clicks on the rocket itself so we can count them
+        // before letting the logo's normal "go home" link take over.
+        event.preventDefault()
+        event.stopPropagation()
+
+        rocketClicks.value++
+        clearTimeout(rocketClickTimer)
+        rocketClickTimer = setTimeout(() => {
+            rocketClicks.value = 0
+        }, 1500)
+
+        if (rocketClicks.value >= EASTER_EGG_THRESHOLD) {
+            rocketClicks.value = 0
+            closeMenu()
+            router.push('/play')
+        } else {
+            router.push('/')
+        }
+    }
+
     onMounted(() => {
         window.addEventListener('scroll', handleScroll)
     })
 
     onUnmounted(() => {
         window.removeEventListener('scroll', handleScroll)
+        clearTimeout(rocketClickTimer)
     })
 </script>
 
@@ -31,7 +60,10 @@
         <div class="nav-container">
             <!-- Logo -->
             <router-link to="/" class="logo" @click="closeMenu">
-                <span class="logo-rocket">
+                <span class="logo-rocket"
+                      :class="{ 'is-charging': rocketClicks >= 3 }"
+                      @click="handleRocketClick"
+                      title="🚀">
                     <RocketScene />
                 </span>
                 <span class="logo-text">Two<span>Dazzle</span></span>
@@ -82,18 +114,12 @@
         left: 0;
         width: 100%;
         z-index: 1000;
-        background-color: rgba(10, 4, 23, 0.7);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0;
+        transition: padding 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .navbar-scrolled {
-        background-color: rgba(10, 4, 23, 0.9);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 0.5rem 0;
+        padding: 14px 20px 0;
     }
 
     .nav-container {
@@ -103,11 +129,21 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        transition: padding 0.3s ease;
+        background-color: rgba(10, 4, 23, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 0px;
+        box-shadow: none;
+        transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .navbar-scrolled .nav-container {
-        padding: 0.8rem 2rem;
+        padding: 0.7rem 1.75rem;
+        background-color: rgba(10, 4, 23, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     }
 
     .logo {
@@ -139,7 +175,23 @@
         height: 34px;
         flex-shrink: 0;
         overflow: hidden;
-        pointer-events: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: box-shadow 0.25s ease;
+    }
+
+        .logo-rocket.is-charging {
+            animation: rocket-charge 0.6s ease-in-out infinite;
+        }
+
+    @keyframes rocket-charge {
+        0%, 100% {
+            box-shadow: 0 0 0 rgba(255, 211, 77, 0);
+        }
+
+        50% {
+            box-shadow: 0 0 10px 2px rgba(255, 211, 77, 0.55);
+        }
     }
 
     .nav-links {

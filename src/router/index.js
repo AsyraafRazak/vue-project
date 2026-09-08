@@ -8,7 +8,8 @@ const routes = [
     { path: '/', name: 'home', component: HomePage },
     { path: '/contact', name: 'contact', component: ContactPage },
     { path: '/demo', name: 'demo', component: DemoPage },
-    { path: '/pricing', name: 'pricing', component: PricingPage }
+    { path: '/pricing', name: 'pricing', component: PricingPage },
+    { path: '/play', name: 'play', component: () => import('../pages/PlayPage.vue') }
 ]
 
 const router = createRouter({
