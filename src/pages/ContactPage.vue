@@ -117,7 +117,8 @@
 <style scoped>
     .contact-section {
         position: relative;
-        padding: 6rem 0;
+        margin-top: -75px;
+        padding: calc(6rem + 75px) 0 6rem 0;
         background-color: var(--color-background-soft);
         overflow: hidden;
     }

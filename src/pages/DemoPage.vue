@@ -10,13 +10,14 @@
                 </p>
             </div>
 
-            <div class="demo-grid">
-                <a v-for="project in projects"
+            <TransitionGroup name="demo-fade" tag="div" class="demo-grid">
+                <a v-for="(project, i) in projects"
                    :key="project.name"
                    :href="project.url"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="demo-card">
+                   class="demo-card"
+                   :style="{ transitionDelay: (i * 0.1) + 's' }">
                     <div class="demo-preview-wrap">
                         <iframe :src="project.url"
                                 class="demo-preview-iframe"
@@ -35,7 +36,7 @@
                         </div>
                     </div>
                 </a>
-            </div>
+            </TransitionGroup>
 
             <p class="demo-note">More projects coming soon — we're just getting started.</p>
 
@@ -74,7 +75,8 @@
 <style scoped>
     .demo-section {
         position: relative;
-        padding: 6rem 0;
+        margin-top: -75px;
+        padding: calc(6rem + 75px) 0 6rem 0;
         background-color: var(--color-background-soft);
         overflow: hidden;
     }
@@ -132,6 +134,11 @@
         transform-origin: top left;
         border: none;
         pointer-events: none;
+        transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .demo-card:hover .demo-preview-iframe {
+        transform: scale(0.43);
     }
 
     .demo-preview-overlay {
@@ -195,6 +202,19 @@
         border: 1px solid rgba(192, 132, 252, 0.25);
         padding: 0.25rem 0.7rem;
         border-radius: 9999px;
+    }
+
+    .demo-fade-enter-active {
+        transition: opacity 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .demo-fade-enter-from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    .demo-fade-move {
+        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .demo-note {

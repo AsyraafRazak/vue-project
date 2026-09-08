@@ -13,6 +13,7 @@
             </div>
 
             <div class="pricing__switch" role="tablist">
+                <div class="pricing__switchIndicator" :class="{ 'is-backend': track === 'backend' }"></div>
                 <button role="tab"
                         :aria-selected="track === 'static'"
                         :class="['pricing__switchBtn', { 'is-active': track === 'static' }]"
@@ -35,10 +36,11 @@
                 }}
             </p>
 
-            <div class="pricing__grid">
-                <article v-for="plan in currentPlans"
+            <TransitionGroup name="plan-fade" tag="div" class="pricing__grid">
+                <article v-for="(plan, i) in currentPlans"
                          :key="plan.name"
-                         :class="['plan', { 'plan--featured': plan.featured }]">
+                         :class="['plan', { 'plan--featured': plan.featured }]"
+                         :style="{ transitionDelay: (i * 0.08) + 's' }">
                     <p class="plan__scope">{{ plan.scope }}</p>
                     <h3 class="plan__name">{{ plan.name }}</h3>
                     <p class="plan__price">
@@ -51,7 +53,7 @@
                     <router-link :to="{ path: '/contact', query: { plan: plan.name, price: plan.from, scope: plan.scope, track: track } }"
                                  class="plan__cta">Get a quote</router-link>
                 </article>
-            </div>
+            </TransitionGroup>
 
             <p class="pricing__footnote">
                 Prices depend on scope - page count, content you provide, and any custom
@@ -166,7 +168,8 @@
         overflow: hidden;
         background-color: var(--color-background-soft);
         color: var(--td-white);
-        padding: 6rem 0;
+        margin-top: -75px;
+        padding: calc(6rem + 75px) 0 6rem 0;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
@@ -187,6 +190,7 @@
 
     /* Toggle */
     .pricing__switch {
+        position: relative;
         display: inline-flex;
         gap: 0.25rem;
         background: var(--td-card-bg);
@@ -196,7 +200,26 @@
         margin: 0.5rem 0 0.75rem;
     }
 
+    .pricing__switchIndicator {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.3rem;
+        width: calc(50% - 0.3rem);
+        height: calc(100% - 0.6rem);
+        background: var(--td-primary);
+        border-radius: 999px;
+        transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        z-index: 0;
+    }
+
+        .pricing__switchIndicator.is-backend {
+            transform: translateX(calc(100% + 0.25rem));
+        }
+
     .pricing__switchBtn {
+        position: relative;
+        z-index: 1;
+        flex: 1;
         border: none;
         background: transparent;
         color: var(--td-body-text);
@@ -205,11 +228,10 @@
         padding: 0.5rem 1.1rem;
         border-radius: 999px;
         cursor: pointer;
-        transition: background 0.2s ease, color 0.2s ease;
+        transition: color 0.3s ease;
     }
 
         .pricing__switchBtn.is-active {
-            background: var(--td-primary);
             color: white;
         }
 
@@ -221,6 +243,7 @@
 
     /* Grid */
     .pricing__grid {
+        position: relative;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.25rem;
@@ -231,6 +254,29 @@
         .pricing__grid {
             grid-template-columns: 1fr;
         }
+    }
+
+    .plan-fade-enter-active {
+        transition: opacity 0.55s cubic-bezier(0.19, 1, 0.22, 1), transform 0.55s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .plan-fade-leave-active {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        position: absolute;
+    }
+
+    .plan-fade-enter-from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+    }
+
+    .plan-fade-leave-to {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.97);
+    }
+
+    .plan-fade-move {
+        transition: transform 0.55s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .plan {

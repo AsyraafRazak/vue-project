@@ -6,6 +6,66 @@ import Astronaut from '../components/Astronaut.vue'
 const ctaSection = ref(null)
 const astronautActive = ref(false)
 const parallaxOffset = ref(0)
+const whyUsContent = ref(null)
+const contentActive = ref(false)
+
+const features = [
+    {
+        title: 'Thoughtful design',
+        desc: 'Clean, modern interfaces built around your brand — not generic templates. Every layout designed with purpose.',
+        icon: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />',
+    },
+    {
+        title: 'Solid development',
+        desc: 'Fast, reliable builds using modern tools — from simple landing pages to fully custom interactive experiences.',
+        icon: '<polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />',
+    },
+    {
+        title: 'Ongoing support',
+        desc: 'Sites evolve. We stick around after launch for updates, fixes, and improvements — no disappearing after handoff.',
+        icon: '<circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />',
+    },
+    {
+        title: 'Interactive experiences',
+        desc: '3D visuals, animations, and interactive elements that make your site feel alive — not just another static page.',
+        icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" />',
+    },
+    {
+        title: 'Fully responsive',
+        desc: 'Every site works flawlessly across desktop, tablet, and mobile — tested and polished on every screen size.',
+        icon: '<rect x="4" y="2" width="16" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />',
+    },
+    {
+        title: 'Brand identity',
+        desc: 'Color palettes, typography, and visual direction that make your brand instantly recognizable and consistent.',
+        icon: '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" /><circle cx="7.5" cy="10.5" r="0.5" /><circle cx="12" cy="7.5" r="0.5" /><circle cx="16.5" cy="10.5" r="0.5" />',
+    }
+]
+
+const activeFeatureIndex = ref(0)
+const featureStepEls = ref([])
+
+function setFeatureStepRef(el, i) {
+    if (el) featureStepEls.value[i] = el
+}
+
+function updateActiveFeature() {
+    const viewportMid = window.innerHeight / 2
+    let closestIndex = activeFeatureIndex.value
+    let closestDist = Infinity
+
+    featureStepEls.value.forEach((el, i) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const dist = Math.abs((rect.top + rect.height / 2) - viewportMid)
+        if (dist < closestDist) {
+            closestDist = dist
+            closestIndex = i
+        }
+    })
+
+    activeFeatureIndex.value = closestIndex
+}
 
 function handleScroll() {
     const el = ctaSection.value
@@ -14,12 +74,18 @@ function handleScroll() {
     const rect = el.getBoundingClientRect()
     const windowHeight = window.innerHeight
 
-    if (rect.top < windowHeight * 0.85 && !astronautActive.value) {
-        astronautActive.value = true
-    }
+    astronautActive.value = rect.top < windowHeight * 0.85
 
     const progress = 1 - Math.max(0, Math.min(1, rect.top / windowHeight))
     parallaxOffset.value = progress * 40
+
+    const contentEl = whyUsContent.value
+    if (contentEl) {
+        const contentRect = contentEl.getBoundingClientRect()
+        contentActive.value = contentRect.top < windowHeight * 0.8
+    }
+
+    updateActiveFeature()
 }
 
 onMounted(() => {
@@ -170,108 +236,33 @@ onBeforeUnmount(() => {
                 </p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                        </svg>
+            <div class="pinned-features">
+                <div class="pinned-visual">
+                    <div class="pinned-visual-icons">
+                        <svg v-for="(feature, i) in features"
+                             :key="feature.title"
+                             class="pinned-visual-icon"
+                             :class="{ 'is-active': activeFeatureIndex === i }"
+                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
+                             stroke-linejoin="round" v-html="feature.icon"></svg>
                     </div>
-                    <h3 class="feature-name">Thoughtful Design</h3>
-                    <p class="feature-desc">
-                        Clean, modern interfaces built around your brand — not generic templates.
-                        Every layout designed with purpose.
-                    </p>
+                    <div class="pinned-visual-counter">
+                        {{ String(activeFeatureIndex + 1).padStart(2, '0') }} / {{ String(features.length).padStart(2, '0') }}
+                    </div>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6" />
-                            <polyline points="8 6 2 12 8 18" />
-                        </svg>
+                <div class="feature-steps">
+                    <div v-for="(feature, i) in features"
+                         :key="feature.title"
+                         class="feature-step"
+                         :class="{ 'is-active': activeFeatureIndex === i }"
+                         :ref="el => setFeatureStepRef(el, i)">
+                        <span class="feature-step-index">{{ String(i + 1).padStart(2, '0') }}</span>
+                        <h3 class="feature-step-title">{{ feature.title }}</h3>
+                        <p class="feature-step-desc">{{ feature.desc }}</p>
                     </div>
-                    <h3 class="feature-name">Solid Development</h3>
-                    <p class="feature-desc">
-                        Fast, reliable builds using modern tools — from simple landing pages
-                        to fully custom interactive experiences.
-                    </p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3" />
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                        </svg>
-                    </div>
-                    <h3 class="feature-name">Ongoing Support</h3>
-                    <p class="feature-desc">
-                        Sites evolve. We stick around after launch for updates, fixes,
-                        and improvements — no disappearing after handoff.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                            <line x1="12" y1="22.08" x2="12" y2="12" />
-                        </svg>
-                    </div>
-                    <h3 class="feature-name">Interactive Experiences</h3>
-                    <p class="feature-desc">
-                        3D visuals, animations, and interactive elements that make your
-                        site feel alive — not just another static page.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-                            <line x1="12" y1="18" x2="12.01" y2="18" />
-                        </svg>
-                    </div>
-                    <h3 class="feature-name">Fully Responsive</h3>
-                    <p class="feature-desc">
-                        Every site works flawlessly across desktop, tablet, and mobile —
-                        tested and polished on every screen size.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
-                            <circle cx="7.5" cy="10.5" r="0.5" />
-                            <circle cx="12" cy="7.5" r="0.5" />
-                            <circle cx="16.5" cy="10.5" r="0.5" />
-                        </svg>
-                    </div>
-                    <h3 class="feature-name">Brand Identity</h3>
-                    <p class="feature-desc">
-                        Color palettes, typography, and visual direction that make your
-                        brand instantly recognizable and consistent.
-                    </p>
-                </div>
-            </div>
-
-            <div class="features-cta">
-               
             </div>
         </div>
     </section>
@@ -287,7 +278,7 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="container why-us-grid">
-        <div class="why-us-content">
+        <div class="why-us-content" ref="whyUsContent" :class="{ 'is-active': contentActive }">
             <span class="section-subtitle">Why Us</span>
             <h2 class="why-us-title">Two devs, one focus — your project</h2>
             <p class="why-us-text">
@@ -318,7 +309,9 @@ onBeforeUnmount(() => {
         flex-direction: column;
         min-height: 100vh;
         padding-top: 75px;
-        /* Navbar height compensation */
+        /* Navbar height compensation. Every top-level page section now
+           bleeds its own real background over this reserved strip via
+           margin-top: -75px, so this div's own background never shows. */
     }
 
     .main-content {
@@ -1017,6 +1010,64 @@ onBeforeUnmount(() => {
     gap: 20px;
 }
 
+.why-us-content .section-subtitle,
+.why-us-title,
+.why-us-text,
+.why-us-list li,
+.why-us-actions {
+    opacity: 0;
+    transform: translateY(44px);
+    transition: opacity 0.85s cubic-bezier(0.19, 1, 0.22, 1), transform 0.85s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.why-us-content.is-active .section-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+.why-us-content.is-active .why-us-title {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.08s;
+}
+
+.why-us-content.is-active .why-us-text {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.18s;
+}
+
+.why-us-content.is-active .why-us-list li:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.28s;
+}
+
+.why-us-content.is-active .why-us-list li:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.35s;
+}
+
+.why-us-content.is-active .why-us-list li:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.42s;
+}
+
+.why-us-content.is-active .why-us-list li:nth-child(4) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.49s;
+}
+
+.why-us-content.is-active .why-us-actions {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.58s;
+}
+
 .why-us-actions {
     display: flex;
     gap: 1rem;
@@ -1093,7 +1144,6 @@ onBeforeUnmount(() => {
 <style scoped>
     .features-section {
         position: relative;
-        overflow: hidden;
     }
 
         .features-section .container {
@@ -1269,4 +1319,165 @@ onBeforeUnmount(() => {
         }
     }
    
+</style>
+
+<style scoped>
+    .pinned-features {
+        display: grid;
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: 4rem;
+        margin-top: 4rem;
+    }
+
+    .pinned-visual {
+        position: sticky;
+        top: 110px;
+        height: calc(100vh - 220px);
+        max-height: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 24px;
+        overflow: hidden;
+        background: rgba(124, 58, 237, 0.08);
+        border: 1px solid rgba(192, 132, 252, 0.2);
+    }
+
+    .pinned-visual-icons {
+        position: relative;
+        width: clamp(120px, 32%, 220px);
+        aspect-ratio: 1;
+    }
+
+    .pinned-visual-icon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        color: var(--td-accent);
+        opacity: 0;
+        transform: scale(0.85) rotate(-6deg);
+        transition: opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1), transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+        .pinned-visual-icon.is-active {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+    .pinned-visual-counter {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        color: var(--td-body-text);
+        opacity: 0.7;
+    }
+
+    .feature-steps {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feature-step {
+        min-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem 0;
+        opacity: 0.3;
+        transform: translateY(8px);
+        transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+        .feature-step:last-child {
+            border-bottom: none;
+        }
+
+        .feature-step.is-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .feature-step-index {
+        font-size: 0.85rem;
+        color: var(--td-accent);
+        letter-spacing: 2px;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .feature-step-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--color-heading);
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-step-desc {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--td-body-text);
+        max-width: 480px;
+    }
+
+    @media (max-width: 900px) {
+        .pinned-features {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .pinned-visual {
+            position: static;
+            height: 200px;
+            max-height: none;
+        }
+
+        .feature-step {
+            min-height: 0;
+            padding: 2rem 0;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .pinned-features {
+            margin-top: 2.5rem;
+        }
+
+        .pinned-visual {
+            height: 160px;
+            border-radius: 16px;
+        }
+
+        .pinned-visual-icons {
+            width: clamp(90px, 40%, 140px);
+        }
+
+        .pinned-visual-counter {
+            bottom: 12px;
+            left: 14px;
+            font-size: 0.75rem;
+        }
+
+        .feature-step {
+            padding: 1.5rem 0;
+        }
+
+        .feature-step-title {
+            font-size: 1.35rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-step-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .feature-step-index {
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+    }
 </style>

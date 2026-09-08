@@ -10,7 +10,7 @@
     const rocketClicks = ref(0)
     let rocketClickTimer = null
 
-    const EASTER_EGG_THRESHOLD = 5
+    const EASTER_EGG_THRESHOLD = 1
 
     const toggleMenu = () => {
         isMenuOpen.value = !isMenuOpen.value
@@ -21,7 +21,7 @@
     }
 
     const handleScroll = () => {
-        isScrolled.value = window.scrollY > 20
+        isScrolled.value = window.scrollY > 80
     }
 
     const handleRocketClick = (event) => {
@@ -107,19 +107,34 @@
 </template>
 
 <style scoped>
-    /* Navbar Container styling */
+    /* ===== Navbar shape: ONE element owns the visual shape and morphs
+       continuously (width, inset, rounding, color) so it reads as a
+       single liquid shrink, not a swap between two boxes. ===== */
     .navbar {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        right: 0;
         z-index: 1000;
-        padding: 0;
-        transition: padding 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 100%;
+        margin: 0 auto;
+        background-color: rgba(10, 4, 23, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid transparent;
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+        border-radius: 0px;
+        box-shadow: none;
+        transition: max-width 0.9s cubic-bezier(0.19, 1, 0.22, 1), margin 0.9s cubic-bezier(0.19, 1, 0.22, 1), border-radius 0.9s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.9s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.9s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .navbar-scrolled {
-        padding: 14px 20px 0;
+        max-width: 900px;
+        margin: 14px auto 0;
+        background-color: rgba(10, 4, 23, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     }
 
     .nav-container {
@@ -129,21 +144,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: rgba(10, 4, 23, 0.7);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 0px;
-        box-shadow: none;
-        transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: padding 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .navbar-scrolled .nav-container {
-        padding: 0.7rem 1.75rem;
-        background-color: rgba(10, 4, 23, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 9999px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        padding: 0.5rem 1.5rem;
     }
 
     .logo {
@@ -155,6 +160,11 @@
         color: var(--color-heading);
         letter-spacing: -0.5px;
         text-decoration: none;
+        transition: font-size 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .navbar-scrolled .logo {
+        font-size: 1.05rem;
     }
 
     .logo-dot {
@@ -177,12 +187,19 @@
         overflow: hidden;
         border-radius: 50%;
         cursor: pointer;
-        transition: box-shadow 0.25s ease;
+        transform: scale(1);
+        transform-origin: center;
+        transition: box-shadow 0.25s ease, transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), margin 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-        .logo-rocket.is-charging {
-            animation: rocket-charge 0.6s ease-in-out infinite;
-        }
+    .navbar-scrolled .logo-rocket {
+        transform: scale(0.7);
+        margin-right: -5px;
+    }
+
+    .logo-rocket.is-charging {
+        animation: rocket-charge 0.6s ease-in-out infinite;
+    }
 
     @keyframes rocket-charge {
         0%, 100% {
@@ -211,7 +228,14 @@
         opacity: 0.85;
         padding: 0.25rem 0;
         text-decoration: none;
+        outline: none;
+        border-radius: 4px;
     }
+
+        .nav-link:focus-visible {
+            outline: 2px solid var(--td-accent);
+            outline-offset: 6px;
+        }
 
         .nav-link:hover {
             opacity: 1;
@@ -244,10 +268,15 @@
         font-size: 0.9rem;
         font-weight: 600;
         border-radius: 9999px;
-        transition: all 0.2s ease-in-out;
+        transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, padding 0.9s cubic-bezier(0.19, 1, 0.22, 1), font-size 0.9s cubic-bezier(0.19, 1, 0.22, 1);
         cursor: pointer;
         border: none;
         text-decoration: none;
+    }
+
+    .navbar-scrolled .nav-cta .btn {
+        padding: 0.5rem 1.1rem;
+        font-size: 0.82rem;
     }
 
     .btn-primary {
@@ -330,7 +359,14 @@
         color: var(--color-heading);
         transition: color 0.2s;
         text-decoration: none;
+        outline: none;
+        border-radius: 4px;
     }
+
+        .mobile-nav-link:focus-visible {
+            outline: 2px solid var(--td-accent);
+            outline-offset: 6px;
+        }
 
         .mobile-nav-link:hover {
             color: var(--td-accent);

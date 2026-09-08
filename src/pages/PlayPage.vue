@@ -498,7 +498,8 @@
 <style scoped>
     .play-section {
         position: relative;
-        padding: 6rem 0;
+        margin-top: -75px;
+        padding: calc(6rem + 75px) 0 6rem 0;
         background-color: var(--color-background-soft);
         background-image: radial-gradient(circle at 15% 10%, rgba(124, 58, 237, 0.16), transparent 45%), radial-gradient(circle at 85% 85%, rgba(192, 132, 252, 0.12), transparent 50%);
         color: var(--td-white);
