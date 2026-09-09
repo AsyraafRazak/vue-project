@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import ThreeBackground from '../components/ThreeBackground.vue'
 import Astronaut from '../components/Astronaut.vue'
@@ -44,12 +44,43 @@ const features = [
 
 const activeFeatureIndex = ref(0)
 const featureStepEls = ref([])
+const sliderRef = ref(null)
 
 function setFeatureStepRef(el, i) {
     if (el) featureStepEls.value[i] = el
 }
 
+function scrollToFeature(index) {
+    activeFeatureIndex.value = index
+    const targetEl = featureStepEls.value[index]
+    if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    }
+}
+
+function onSliderScroll() {
+    if (window.innerWidth > 900 || !sliderRef.value) return
+    const container = sliderRef.value
+    const center = container.scrollLeft + container.clientWidth / 2
+
+    let closestIdx = activeFeatureIndex.value
+    let closestDist = Infinity
+
+    featureStepEls.value.forEach((el, i) => {
+        if (!el) return
+        const elCenter = el.offsetLeft + el.offsetWidth / 2
+        const dist = Math.abs(elCenter - center)
+        if (dist < closestDist) {
+            closestDist = dist
+            closestIdx = i
+        }
+    })
+
+    activeFeatureIndex.value = closestIdx
+}
+
 function updateActiveFeature() {
+    if (window.innerWidth <= 900) return
     const viewportMid = window.innerHeight / 2
     let closestIndex = activeFeatureIndex.value
     let closestDist = Infinity
@@ -252,15 +283,35 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
 
-                <div class="feature-steps">
-                    <div v-for="(feature, i) in features"
-                         :key="feature.title"
-                         class="feature-step"
-                         :class="{ 'is-active': activeFeatureIndex === i }"
-                         :ref="el => setFeatureStepRef(el, i)">
-                        <span class="feature-step-index">{{ String(i + 1).padStart(2, '0') }}</span>
-                        <h3 class="feature-step-title">{{ feature.title }}</h3>
-                        <p class="feature-step-desc">{{ feature.desc }}</p>
+                <div class="feature-steps-wrapper">
+                    <div class="feature-steps" ref="sliderRef" @scroll.passive="onSliderScroll">
+                        <div v-for="(feature, i) in features"
+                             :key="feature.title"
+                             class="feature-step"
+                             :class="{ 'is-active': activeFeatureIndex === i }"
+                             :ref="el => setFeatureStepRef(el, i)">
+                            <div class="feature-step-top">
+                                <span class="feature-step-index">{{ String(i + 1).padStart(2, '0') }}</span>
+                                <div class="feature-step-mobile-icon-box">
+                                    <svg class="feature-step-mobile-icon"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                         stroke-linejoin="round" v-html="feature.icon"></svg>
+                                </div>
+                            </div>
+                            <h3 class="feature-step-title">{{ feature.title }}</h3>
+                            <p class="feature-step-desc">{{ feature.desc }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Carousel Pagination Dots -->
+                    <div class="feature-slider-dots">
+                        <button v-for="(_, i) in features"
+                                :key="i"
+                                class="feature-slider-dot"
+                                :class="{ 'is-active': activeFeatureIndex === i }"
+                                @click="scrollToFeature(i)"
+                                :aria-label="`Go to feature ${i + 1}`"></button>
                     </div>
                 </div>
             </div>
@@ -1375,6 +1426,11 @@ onBeforeUnmount(() => {
         opacity: 0.7;
     }
 
+    .feature-steps-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
     .feature-steps {
         display: flex;
         flex-direction: column;
@@ -1401,12 +1457,22 @@ onBeforeUnmount(() => {
             transform: translateY(0);
         }
 
+    .feature-step-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
     .feature-step-index {
         font-size: 0.85rem;
         color: var(--td-accent);
         letter-spacing: 2px;
-        margin-bottom: 0.75rem;
         display: block;
+    }
+
+    .feature-step-mobile-icon-box {
+        display: none;
     }
 
     .feature-step-title {
@@ -1423,46 +1489,104 @@ onBeforeUnmount(() => {
         max-width: 480px;
     }
 
-    @media (max-width: 900px) {
-        .pinned-features {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .pinned-visual {
-            position: static;
-            height: 200px;
-            max-height: none;
-        }
-
-        .feature-step {
-            min-height: 0;
-            padding: 2rem 0;
-        }
+    .feature-slider-dots {
+        display: none;
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 900px) {
         .pinned-features {
+            display: block;
             margin-top: 2.5rem;
         }
 
         .pinned-visual {
-            height: 160px;
-            border-radius: 16px;
+            display: none;
         }
 
-        .pinned-visual-icons {
-            width: clamp(90px, 40%, 140px);
+        .feature-steps {
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            gap: 1.25rem;
+            padding: 0.5rem 0.25rem 1.25rem 0.25rem;
+            scrollbar-width: none;
         }
 
-        .pinned-visual-counter {
-            bottom: 12px;
-            left: 14px;
-            font-size: 0.75rem;
-        }
+            .feature-steps::-webkit-scrollbar {
+                display: none;
+            }
 
         .feature-step {
-            padding: 1.5rem 0;
+            flex: 0 0 85%;
+            min-height: auto;
+            opacity: 1;
+            transform: none;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            padding: 2rem 1.75rem;
+            border-radius: 20px;
+            background: var(--td-card-bg, rgba(255, 255, 255, 0.03));
+            border: 1px solid var(--td-card-border, rgba(255, 255, 255, 0.08));
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.35s ease;
+        }
+
+            .feature-step.is-active {
+                border-color: rgba(192, 132, 252, 0.45);
+                background: rgba(124, 58, 237, 0.09);
+                box-shadow: 0 10px 28px rgba(124, 58, 237, 0.16);
+            }
+
+        .feature-step-mobile-icon-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(192, 132, 252, 0.25);
+        }
+
+        .feature-step-mobile-icon {
+            width: 22px;
+            height: 22px;
+            color: var(--td-accent);
+        }
+
+        .feature-slider-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1.25rem;
+        }
+
+        .feature-slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+            .feature-slider-dot.is-active {
+                width: 26px;
+                background: var(--td-accent);
+                box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+            }
+    }
+
+    @media (max-width: 560px) {
+        .feature-step {
+            flex: 0 0 88%;
+            padding: 1.5rem 1.25rem;
+            border-radius: 16px;
         }
 
         .feature-step-title {
@@ -1471,13 +1595,12 @@ onBeforeUnmount(() => {
         }
 
         .feature-step-desc {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             line-height: 1.6;
         }
 
         .feature-step-index {
             font-size: 0.75rem;
-            margin-bottom: 0.5rem;
         }
     }
 </style>
