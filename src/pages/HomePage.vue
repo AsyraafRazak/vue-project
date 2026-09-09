@@ -13,31 +13,37 @@ const features = [
     {
         title: 'Thoughtful design',
         desc: 'Clean, modern interfaces built around your brand — not generic templates. Every layout designed with purpose.',
+        image: '/images/pictures/thoughtful-design.png',
         icon: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />',
     },
     {
         title: 'Solid development',
         desc: 'Fast, reliable builds using modern tools — from simple landing pages to fully custom interactive experiences.',
+        image: '/images/pictures/solid-development.png',
         icon: '<polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />',
     },
     {
         title: 'Ongoing support',
         desc: 'Sites evolve. We stick around after launch for updates, fixes, and improvements — no disappearing after handoff.',
+        image: '/images/pictures/ongoing-support.png',
         icon: '<circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />',
     },
     {
         title: 'Interactive experiences',
         desc: '3D visuals, animations, and interactive elements that make your site feel alive — not just another static page.',
+        image: '/images/pictures/interactive-experiences.png',
         icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" />',
     },
     {
         title: 'Fully responsive',
         desc: 'Every site works flawlessly across desktop, tablet, and mobile — tested and polished on every screen size.',
+        image: '/images/pictures/fully-responsive.png',
         icon: '<rect x="4" y="2" width="16" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />',
     },
     {
         title: 'Brand identity',
         desc: 'Color palettes, typography, and visual direction that make your brand instantly recognizable and consistent.',
+        image: '/images/pictures/brand-identity.png',
         icon: '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" /><circle cx="7.5" cy="10.5" r="0.5" /><circle cx="12" cy="7.5" r="0.5" /><circle cx="16.5" cy="10.5" r="0.5" />',
     }
 ]
@@ -269,14 +275,14 @@ onBeforeUnmount(() => {
 
             <div class="pinned-features">
                 <div class="pinned-visual">
-                    <div class="pinned-visual-icons">
-                        <svg v-for="(feature, i) in features"
+                    <div class="pinned-visual-backdrop"></div>
+                    <div class="pinned-visual-images">
+                        <img v-for="(feature, i) in features"
                              :key="feature.title"
-                             class="pinned-visual-icon"
-                             :class="{ 'is-active': activeFeatureIndex === i }"
-                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
-                             stroke-linejoin="round" v-html="feature.icon"></svg>
+                             :src="feature.image"
+                             :alt="feature.title"
+                             class="pinned-visual-img"
+                             :class="{ 'is-active': activeFeatureIndex === i }" />
                     </div>
                     <div class="pinned-visual-counter">
                         {{ String(activeFeatureIndex + 1).padStart(2, '0') }} / {{ String(features.length).padStart(2, '0') }}
@@ -293,10 +299,9 @@ onBeforeUnmount(() => {
                             <div class="feature-step-top">
                                 <span class="feature-step-index">{{ String(i + 1).padStart(2, '0') }}</span>
                                 <div class="feature-step-mobile-icon-box">
-                                    <svg class="feature-step-mobile-icon"
-                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                         stroke-linejoin="round" v-html="feature.icon"></svg>
+                                    <img :src="feature.image"
+                                         :alt="feature.title"
+                                         class="feature-step-mobile-img" />
                                 </div>
                             </div>
                             <h3 class="feature-step-title">{{ feature.title }}</h3>
@@ -1390,30 +1395,47 @@ onBeforeUnmount(() => {
         justify-content: center;
         border-radius: 24px;
         overflow: hidden;
-        background: rgba(124, 58, 237, 0.08);
-        border: 1px solid rgba(192, 132, 252, 0.2);
+        background: radial-gradient(circle at center, rgba(124, 58, 237, 0.16) 0%, rgba(10, 6, 22, 0.65) 80%);
+        border: 1px solid rgba(192, 132, 252, 0.25);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    .pinned-visual-icons {
+    .pinned-visual-backdrop {
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+        filter: blur(35px);
+        pointer-events: none;
+    }
+
+    .pinned-visual-images {
         position: relative;
-        width: clamp(120px, 32%, 220px);
+        width: clamp(160px, 45%, 260px);
         aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .pinned-visual-icon {
+    .pinned-visual-img {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        color: var(--td-accent);
+        object-fit: contain;
         opacity: 0;
-        transform: scale(0.85) rotate(-6deg);
-        transition: opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1), transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        transform: scale(0.82) rotate(-8deg) translateY(14px);
+        transition: opacity 0.65s cubic-bezier(0.19, 1, 0.22, 1), transform 0.65s cubic-bezier(0.19, 1, 0.22, 1), filter 0.65s ease;
+        filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.3));
+        pointer-events: none;
     }
 
-        .pinned-visual-icon.is-active {
+        .pinned-visual-img.is-active {
             opacity: 1;
-            transform: scale(1) rotate(0deg);
+            transform: scale(1) rotate(0deg) translateY(0);
+            filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 30px rgba(192, 132, 252, 0.45));
         }
 
     .pinned-visual-counter {
@@ -1525,7 +1547,7 @@ onBeforeUnmount(() => {
             transform: none;
             scroll-snap-align: center;
             scroll-snap-stop: always;
-            padding: 2rem 1.75rem;
+            padding: 1.85rem 1.6rem;
             border-radius: 20px;
             background: var(--td-card-bg, rgba(255, 255, 255, 0.03));
             border: 1px solid var(--td-card-border, rgba(255, 255, 255, 0.08));
@@ -1543,17 +1565,21 @@ onBeforeUnmount(() => {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             background: rgba(124, 58, 237, 0.15);
             border: 1px solid rgba(192, 132, 252, 0.25);
+            padding: 6px;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.2);
+            flex-shrink: 0;
         }
 
-        .feature-step-mobile-icon {
-            width: 22px;
-            height: 22px;
-            color: var(--td-accent);
+        .feature-step-mobile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
         }
 
         .feature-slider-dots {
@@ -1587,6 +1613,12 @@ onBeforeUnmount(() => {
             flex: 0 0 88%;
             padding: 1.5rem 1.25rem;
             border-radius: 16px;
+        }
+
+        .feature-step-mobile-icon-box {
+            width: 44px;
+            height: 44px;
+            padding: 4px;
         }
 
         .feature-step-title {
