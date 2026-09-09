@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Add Project — TwoDazzle Admin</title>
+    <title>Add Project â€” TwoDazzle Admin</title>
     <style>
         * {
             box-sizing: border-box;
@@ -197,8 +197,12 @@
             <label for="tags">Tags (comma-separated)</label>
             <input type="text" id="tags" name="tags" placeholder="Vue, Template, F&B">
 
-            <label for="image">Screenshot (optional, JPG/PNG/WEBP, max 5MB)</label>
-            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+            <label for="mainImage">Main Photo (required, JPG/PNG/WEBP, max 5MB)</label>
+            <input type="file" id="mainImage" name="mainImage" accept="image/jpeg,image/png,image/webp" required>
+
+            <label for="galleryImages">Additional Photos (optional, up to 4, max 5MB each)</label>
+            <input type="file" id="galleryImages" name="galleryImages[]" accept="image/jpeg,image/png,image/webp" multiple>
+            <p class="note" id="galleryHint">Select up to 4 extra photos for the hover collage.</p>
 
             <button type="submit" id="submitBtn" class="btn-primary">Add Project</button>
             <div id="status"></div>
@@ -215,7 +219,7 @@
     </div>
 
     <script>
-        // Same endpoints as before — nothing changed on the PHP side except the new delete-project.php
+        // Same endpoints as before â€” nothing changed on the PHP side except the new delete-project.php
         const API_PROJECTS = '/api/projects.php';
         const API_UPLOAD = '/api/upload-project.php';
         const API_DELETE = '/api/delete-project.php';
@@ -226,6 +230,18 @@
         const passwordInput = document.getElementById('password');
         const listEl = document.getElementById('projectList');
         const listStatusEl = document.getElementById('listStatus');
+        const galleryInput = document.getElementById('galleryImages');
+        const galleryHint = document.getElementById('galleryHint');
+
+        galleryInput.addEventListener('change', () => {
+            if (galleryInput.files.length > 4) {
+                galleryHint.textContent = `You selected ${galleryInput.files.length} â€” only the first 4 will be used. Reselect if needed.`;
+                galleryHint.style.color = '#f87171';
+            } else {
+                galleryHint.textContent = 'Select up to 4 extra photos for the hover collage.';
+                galleryHint.style.color = '';
+            }
+        });
 
         async function loadProjects() {
             listEl.innerHTML = '<p class="list-empty">Loading...</p>';
@@ -243,12 +259,12 @@
                     const row = document.createElement('div');
                     row.className = 'list-item';
                     row.innerHTML = `
-                        <div class="list-item-info">
-                            <div class="list-item-name"></div>
-                            <div class="list-item-url"></div>
-                        </div>
-                        <button class="btn-delete" type="button">Delete</button>
-                    `;
+                            <div class="list-item-info">
+                                <div class="list-item-name"></div>
+                                <div class="list-item-url"></div>
+                            </div>
+                            <button class="btn-delete" type="button">Delete</button>
+                        `;
                     row.querySelector('.list-item-name').textContent = project.name;
                     row.querySelector('.list-item-url').textContent = project.url;
                     row.querySelector('.btn-delete').addEventListener('click', () => deleteProject(project.name));
@@ -298,6 +314,13 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (galleryInput.files.length > 4) {
+                statusEl.textContent = 'Please select at most 4 additional photos.';
+                statusEl.className = 'error';
+                return;
+            }
+
             submitBtn.disabled = true;
             statusEl.textContent = 'Uploading...';
             statusEl.className = '';
