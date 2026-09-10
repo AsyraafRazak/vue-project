@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Add Project — TwoDazzle Admin</title>
+    <title>TwoDazzle Admin</title>
     <style>
         * {
             box-sizing: border-box;
@@ -14,26 +14,126 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: #0A0417;
             color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 3rem 1.5rem;
             margin: 0;
-            gap: 2rem;
+            min-height: 100vh;
+        }
+
+        /* ── Auth gate ────────────────────────────────────────────────── */
+        #authGateWrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        #authGate {
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+        }
+
+            #authGate h1 {
+                margin-bottom: 0.5rem;
+            }
+
+            #authGate p {
+                font-size: 0.85rem;
+                opacity: 0.6;
+                margin: 0 0 1.5rem;
+            }
+
+        #authError {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: #f87171;
+            min-height: 1.2em;
+        }
+
+        /* ── Top bar ──────────────────────────────────────────────────── */
+        #topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(10, 4, 23, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(192, 132, 252, 0.15);
+        }
+
+            #topbar h1 {
+                font-size: 1.05rem;
+                margin: 0;
+                color: #C084FC;
+                font-weight: 700;
+            }
+
+        .btn-logout {
+            padding: 0.45rem 1rem;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(192, 132, 252, 0.25);
+            font-size: 0.8rem;
+        }
+
+            .btn-logout:hover {
+                background: rgba(192, 132, 252, 0.1);
+                color: #fff;
+            }
+
+        /* ── Layout ───────────────────────────────────────────────────── */
+        #cmsContent {
+            display: none;
+        }
+
+        .layout {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 1.75rem;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+                padding: 1.25rem;
+            }
         }
 
         .card {
             width: 100%;
-            max-width: 480px;
             background: #150a2e;
             border: 1px solid rgba(192, 132, 252, 0.25);
             border-radius: 14px;
-            padding: 2rem;
+            padding: 1.75rem;
+        }
+
+        #formCard {
+            position: sticky;
+            top: 76px;
+        }
+
+        @media (max-width: 900px) {
+            #formCard {
+                position: static;
+            }
         }
 
         h1 {
-            font-size: 1.3rem;
-            margin: 0 0 1.5rem;
+            font-size: 1.15rem;
+            margin: 0 0 1.25rem;
+            color: #C084FC;
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 0;
             color: #C084FC;
         }
 
@@ -101,12 +201,33 @@
                 color: #f87171;
             }
 
+        /* ── Project list card ────────────────────────────────────────── */
+        .list-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+            .list-card-header h2 {
+                margin: 0;
+            }
+
+        #projectCount {
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
+        #searchInput {
+            margin-bottom: 1rem;
+        }
+
         .list-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-            padding: 0.9rem 0;
+            gap: 0.9rem;
+            padding: 0.75rem 0;
             border-bottom: 1px solid rgba(192, 132, 252, 0.12);
         }
 
@@ -114,8 +235,19 @@
                 border-bottom: none;
             }
 
+        .list-item-thumb {
+            width: 64px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #0A0417;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+        }
+
         .list-item-info {
             min-width: 0;
+            flex: 1;
         }
 
         .list-item-name {
@@ -134,6 +266,24 @@
             white-space: nowrap;
         }
 
+        .list-item-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn-edit {
+            padding: 0.45rem 0.9rem;
+            background: rgba(192, 132, 252, 0.12);
+            color: #C084FC;
+            border: 1px solid rgba(192, 132, 252, 0.35);
+            font-size: 0.8rem;
+        }
+
+            .btn-edit:hover:not(:disabled) {
+                background: rgba(192, 132, 252, 0.25);
+            }
+
         .btn-delete {
             flex-shrink: 0;
             padding: 0.45rem 0.9rem;
@@ -151,7 +301,7 @@
             opacity: 0.5;
             font-size: 0.85rem;
             text-align: center;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
         }
 
         .note {
@@ -175,53 +325,120 @@
             #listStatus.error {
                 color: #f87171;
             }
+
+        /* ── Photo previews inside the form ──────────────────────────── */
+        .photo-row, .photo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .photo-thumb {
+            position: relative;
+            width: 72px;
+        }
+
+            .photo-thumb img {
+                width: 72px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 6px;
+                border: 1px solid rgba(192, 132, 252, 0.25);
+                display: block;
+            }
+
+        .photo-thumb-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+            .photo-thumb-label input {
+                width: auto;
+            }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Add a Project</h1>
-        <form id="projectForm">
-            <label for="password">Admin Password</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="name">Project Name</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="desc">Description</label>
-            <textarea id="desc" name="desc" required></textarea>
-
-            <label for="url">Live URL</label>
-            <input type="url" id="url" name="url" placeholder="https://" required>
-
-            <label for="tags">Tags (comma-separated)</label>
-            <input type="text" id="tags" name="tags" placeholder="Vue, Template, F&B">
-
-            <label for="mainImage">Main Photo (required, JPG/PNG/WEBP, max 5MB)</label>
-            <input type="file" id="mainImage" name="mainImage" accept="image/jpeg,image/png,image/webp" required>
-
-            <label for="galleryImages">Additional Photos (optional, up to 4, max 5MB each)</label>
-            <input type="file" id="galleryImages" name="galleryImages[]" accept="image/jpeg,image/png,image/webp" multiple>
-            <p class="note" id="galleryHint">Select up to 4 extra photos for the hover collage.</p>
-
-            <button type="submit" id="submitBtn" class="btn-primary">Add Project</button>
-            <div id="status"></div>
-        </form>
+    <div id="authGateWrap">
+        <div id="authGate" class="card">
+            <h1>Admin Access</h1>
+            <p>Enter the admin password to continue.</p>
+            <form id="authForm">
+                <input type="password" id="authPassword" placeholder="Password" required autofocus>
+                <button type="submit" id="authSubmitBtn" class="btn-primary">Unlock</button>
+                <div id="authError"></div>
+            </form>
+        </div>
     </div>
 
-    <div class="card">
-        <h1>Existing Projects</h1>
-        <p class="note">Password above is reused for deleting below.</p>
-        <div id="projectList">
-            <p class="list-empty">Loading...</p>
+    <div id="cmsContent">
+        <div id="topbar">
+            <h1>TwoDazzle Admin</h1>
+            <button type="button" id="logoutBtn" class="btn-logout">Log out</button>
         </div>
-        <div id="listStatus"></div>
+
+        <div class="layout">
+            <div class="card" id="formCard">
+                <h1 id="formTitle">Add a Project</h1>
+                <p class="note" id="editNote" style="display:none;">Editing an existing project. <a href="#" id="cancelEdit">Cancel</a></p>
+                <form id="projectForm">
+                    <input type="hidden" id="originalName" name="originalName" value="">
+                    <input type="hidden" id="password" name="password" value="">
+
+                    <label for="name">Project Name</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="desc">Description</label>
+                    <textarea id="desc" name="desc" required></textarea>
+
+                    <label for="url">Live URL</label>
+                    <input type="url" id="url" name="url" placeholder="https://" required>
+
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" id="tags" name="tags" placeholder="Vue, Template, F&B">
+
+                    <div id="currentPhotos" style="display:none;">
+                        <label>Current Photos</label>
+                        <div id="currentMainPreview" class="photo-row"></div>
+                        <div id="currentGalleryPreview" class="photo-grid"></div>
+                    </div>
+
+                    <label for="mainImage" id="mainImageLabel">Main Photo (required, JPG/PNG/WEBP, max 5MB)</label>
+                    <input type="file" id="mainImage" name="mainImage" accept="image/jpeg,image/png,image/webp" required>
+
+                    <label for="galleryImages" id="galleryImagesLabel">Additional Photos (optional, up to 4, max 5MB each)</label>
+                    <input type="file" id="galleryImages" name="galleryImages[]" accept="image/jpeg,image/png,image/webp" multiple>
+                    <p class="note" id="galleryHint">Select up to 4 extra photos for the hover collage.</p>
+
+                    <button type="submit" id="submitBtn" class="btn-primary">Add Project</button>
+                    <div id="status"></div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="list-card-header">
+                    <h2>Existing Projects</h2>
+                    <span id="projectCount"></span>
+                </div>
+                <input type="text" id="searchInput" placeholder="Search by name or tag...">
+                <div id="projectList">
+                    <p class="list-empty">Loading...</p>
+                </div>
+                <div id="listStatus"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Same endpoints as before — nothing changed on the PHP side except the new delete-project.php
+        // Same endpoints as before — nothing changed on the PHP side except the new delete-project.php and edit-project.php
         const API_PROJECTS = '/api/projects.php';
         const API_UPLOAD = '/api/upload-project.php';
+        const API_EDIT = '/api/edit-project.php';
         const API_DELETE = '/api/delete-project.php';
 
         const form = document.getElementById('projectForm');
@@ -232,6 +449,21 @@
         const listStatusEl = document.getElementById('listStatus');
         const galleryInput = document.getElementById('galleryImages');
         const galleryHint = document.getElementById('galleryHint');
+        const formTitle = document.getElementById('formTitle');
+        const editNote = document.getElementById('editNote');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const originalNameInput = document.getElementById('originalName');
+        const mainImageInput = document.getElementById('mainImage');
+        const mainImageLabel = document.getElementById('mainImageLabel');
+        const galleryImagesLabel = document.getElementById('galleryImagesLabel');
+        const currentPhotos = document.getElementById('currentPhotos');
+        const currentMainPreview = document.getElementById('currentMainPreview');
+        const currentGalleryPreview = document.getElementById('currentGalleryPreview');
+        const projectCount = document.getElementById('projectCount');
+        const searchInput = document.getElementById('searchInput');
+
+        let editingProject = null; // holds the full project object while editing, null while adding
+        let allProjects = []; // last loaded list, used for client-side search filtering
 
         galleryInput.addEventListener('change', () => {
             if (galleryInput.files.length > 4) {
@@ -243,33 +475,138 @@
             }
         });
 
+        function enterEditMode(project) {
+            editingProject = project;
+
+            originalNameInput.value = project.name;
+            document.getElementById('name').value = project.name;
+            document.getElementById('desc').value = project.desc;
+            document.getElementById('url').value = project.url;
+            document.getElementById('tags').value = (project.tags || []).join(', ');
+
+            mainImageInput.required = false;
+            mainImageLabel.textContent = 'Replace Main Photo (optional, JPG/PNG/WEBP, max 5MB)';
+            galleryImagesLabel.textContent = 'Add More Photos (optional, up to remaining slots)';
+
+            const images = project.images || [];
+            const main = images[0];
+            const gallery = images.slice(1);
+
+            currentMainPreview.innerHTML = main
+                ? `<div class="photo-thumb"><img src="${main}" alt=""><div class="photo-thumb-label">Main</div></div>`
+                : '<p class="list-empty">No main photo yet.</p>';
+
+            currentGalleryPreview.innerHTML = '';
+            gallery.forEach((imgPath, i) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'photo-thumb';
+                wrap.innerHTML = `
+                        <img src="${imgPath}" alt="">
+                        <label class="photo-thumb-label">
+                            <input type="checkbox" class="remove-gallery-checkbox" value="${imgPath}">
+                            Remove
+                        </label>
+                    `;
+                currentGalleryPreview.appendChild(wrap);
+            });
+
+            currentPhotos.style.display = 'block';
+            formTitle.textContent = `Edit "${project.name}"`;
+            editNote.style.display = 'block';
+            submitBtn.textContent = 'Save Changes';
+
+            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function exitEditMode() {
+            editingProject = null;
+            originalNameInput.value = '';
+            form.reset();
+            passwordInput.value = sessionStorage.getItem(SESSION_KEY) || '';
+
+            mainImageInput.required = true;
+            mainImageLabel.textContent = 'Main Photo (required, JPG/PNG/WEBP, max 5MB)';
+            galleryImagesLabel.textContent = 'Additional Photos (optional, up to 4, max 5MB each)';
+            currentPhotos.style.display = 'none';
+            currentMainPreview.innerHTML = '';
+            currentGalleryPreview.innerHTML = '';
+
+            formTitle.textContent = 'Add a Project';
+            editNote.style.display = 'none';
+            submitBtn.textContent = 'Add Project';
+        }
+
+        cancelEdit.addEventListener('click', (e) => {
+            e.preventDefault();
+            exitEditMode();
+        });
+
+        function renderProjectList(projects) {
+            if (projects.length === 0) {
+                listEl.innerHTML = '<p class="list-empty">No projects match.</p>';
+                return;
+            }
+
+            listEl.innerHTML = '';
+            projects.forEach((project) => {
+                const thumb = (project.images && project.images[0]) || '';
+                const row = document.createElement('div');
+                row.className = 'list-item';
+                row.innerHTML = `
+                        <img class="list-item-thumb" src="${thumb}" alt="" onerror="this.style.visibility='hidden'">
+                        <div class="list-item-info">
+                            <div class="list-item-name"></div>
+                            <div class="list-item-url"></div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit" type="button">Edit</button>
+                            <button class="btn-delete" type="button">Delete</button>
+                        </div>
+                    `;
+                row.querySelector('.list-item-name').textContent = project.name;
+                row.querySelector('.list-item-url').textContent = project.url;
+                row.querySelector('.btn-edit').addEventListener('click', () => enterEditMode(project));
+                row.querySelector('.btn-delete').addEventListener('click', () => deleteProject(project.name));
+                listEl.appendChild(row);
+            });
+        }
+
+        function applySearch() {
+            const q = searchInput.value.trim().toLowerCase();
+            if (!q) {
+                renderProjectList(allProjects);
+                return;
+            }
+            const filtered = allProjects.filter((p) => {
+                const inName = p.name.toLowerCase().includes(q);
+                const inTags = (p.tags || []).some((t) => t.toLowerCase().includes(q));
+                return inName || inTags;
+            });
+            renderProjectList(filtered);
+        }
+
+        searchInput.addEventListener('input', applySearch);
+
         async function loadProjects() {
             listEl.innerHTML = '<p class="list-empty">Loading...</p>';
             try {
                 const res = await fetch(API_PROJECTS);
                 const data = await res.json();
 
-                if (!Array.isArray(data) || data.length === 0) {
+                if (!Array.isArray(data)) {
+                    listEl.innerHTML = '<p class="list-empty">Failed to load projects.</p>';
+                    return;
+                }
+
+                allProjects = data;
+                projectCount.textContent = data.length ? `${data.length} total` : '';
+
+                if (data.length === 0) {
                     listEl.innerHTML = '<p class="list-empty">No projects yet.</p>';
                     return;
                 }
 
-                listEl.innerHTML = '';
-                data.forEach((project) => {
-                    const row = document.createElement('div');
-                    row.className = 'list-item';
-                    row.innerHTML = `
-                            <div class="list-item-info">
-                                <div class="list-item-name"></div>
-                                <div class="list-item-url"></div>
-                            </div>
-                            <button class="btn-delete" type="button">Delete</button>
-                        `;
-                    row.querySelector('.list-item-name').textContent = project.name;
-                    row.querySelector('.list-item-url').textContent = project.url;
-                    row.querySelector('.btn-delete').addEventListener('click', () => deleteProject(project.name));
-                    listEl.appendChild(row);
-                });
+                applySearch();
             } catch (err) {
                 listEl.innerHTML = '<p class="list-empty">Failed to load projects.</p>';
             }
@@ -278,7 +615,7 @@
         async function deleteProject(name) {
             const password = passwordInput.value;
             if (!password) {
-                listStatusEl.textContent = 'Enter the admin password above first.';
+                listStatusEl.textContent = 'Session expired — refresh and log in again.';
                 listStatusEl.className = 'error';
                 return;
             }
@@ -301,6 +638,9 @@
                 if (data.success) {
                     listStatusEl.textContent = 'Project deleted.';
                     listStatusEl.className = 'success';
+                    if (editingProject && editingProject.name === name) {
+                        exitEditMode();
+                    }
                     loadProjects();
                 } else {
                     listStatusEl.textContent = data.message || 'Failed to delete.';
@@ -322,21 +662,29 @@
             }
 
             submitBtn.disabled = true;
-            statusEl.textContent = 'Uploading...';
+            statusEl.textContent = editingProject ? 'Saving...' : 'Uploading...';
             statusEl.className = '';
 
             const formData = new FormData(form);
+            let endpoint = API_UPLOAD;
+
+            if (editingProject) {
+                endpoint = API_EDIT;
+                const removeGallery = Array.from(document.querySelectorAll('.remove-gallery-checkbox:checked'))
+                    .map((cb) => cb.value);
+                formData.append('removeGallery', JSON.stringify(removeGallery));
+            } else {
+                formData.delete('originalName');
+            }
 
             try {
-                const res = await fetch(API_UPLOAD, { method: 'POST', body: formData });
+                const res = await fetch(endpoint, { method: 'POST', body: formData });
                 const data = await res.json();
 
                 if (data.success) {
-                    statusEl.textContent = 'Project added successfully.';
+                    statusEl.textContent = editingProject ? 'Project updated.' : 'Project added successfully.';
                     statusEl.className = 'success';
-                    const savedPassword = passwordInput.value;
-                    form.reset();
-                    passwordInput.value = savedPassword;
+                    exitEditMode();
                     loadProjects();
                 } else {
                     statusEl.textContent = data.message || 'Something went wrong.';
@@ -350,7 +698,74 @@
             }
         });
 
-        loadProjects();
+        // loadProjects() is now called after the password gate unlocks — see auth block below
+
+        // ── Password gate ──────────────────────────────────────────────────
+        const API_VERIFY = '/api/verify-password.php';
+        const SESSION_KEY = 'td_admin_password';
+
+        const authGate = document.getElementById('authGateWrap');
+        const cmsContent = document.getElementById('cmsContent');
+        const authForm = document.getElementById('authForm');
+        const authPassword = document.getElementById('authPassword');
+        const authSubmitBtn = document.getElementById('authSubmitBtn');
+        const authError = document.getElementById('authError');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        function unlock(password) {
+            authGate.style.display = 'none';
+            cmsContent.style.display = 'block';
+            passwordInput.value = password;
+            loadProjects();
+        }
+
+        async function tryPassword(password, { onFail } = {}) {
+            try {
+                const res = await fetch(API_VERIFY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    sessionStorage.setItem(SESSION_KEY, password);
+                    unlock(password);
+                } else if (onFail) {
+                    onFail(data.message || 'Incorrect password.');
+                }
+            } catch (err) {
+                if (onFail) onFail('Network error. Please try again.');
+            }
+        }
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authSubmitBtn.disabled = true;
+            authError.textContent = '';
+
+            await tryPassword(authPassword.value, {
+                onFail: (msg) => { authError.textContent = msg; }
+            });
+
+            authSubmitBtn.disabled = false;
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem(SESSION_KEY);
+            cmsContent.style.display = 'none';
+            authGate.style.display = 'flex';
+            authPassword.value = '';
+            authPassword.focus();
+        });
+
+        // If this tab already unlocked once this session, skip the gate
+        const savedPassword = sessionStorage.getItem(SESSION_KEY);
+        if (savedPassword) {
+            tryPassword(savedPassword, {
+                onFail: () => { sessionStorage.removeItem(SESSION_KEY); }
+            });
+        }
     </script>
 </body>
 </html>

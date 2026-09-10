@@ -1,7 +1,7 @@
 ﻿<?php
 /**
  * Add Project (Admin)
- * Appends a new project to data/projects.json and stores its screenshot in /uploads.
+ * Appends a new project to data/projects.json and stores its photos in /uploads.
  *
  * REQUIREMENTS:
  * - config.php placed OUTSIDE public_html (same location used by send-mail.php)
@@ -48,7 +48,7 @@ if (!defined('ADMIN_UPLOAD_PASSWORD')) {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Validate input (multipart/form-data: password, name, desc, url, tags, image) ──
+// ── Validate input (multipart/form-data: password, name, desc, url, tags, mainImage, galleryImages[]) ──
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 $name     = isset($_POST['name'])     ? trim(strip_tags($_POST['name']))    : '';
 $desc     = isset($_POST['desc'])     ? trim(strip_tags($_POST['desc']))    : '';
@@ -77,45 +77,95 @@ $tags = array_filter(array_map('trim', explode(',', $tagsRaw)));
 $tags = array_values($tags);
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Handle image upload (optional) ──────────────────────────────────────────────
-$imagePath = null;
+// ── Handle photo uploads (1 main, required + up to 4 gallery, optional) ────────
+$allowedTypes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+$maxBytes     = 5 * 1024 * 1024;
 
-if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $allowedTypes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+$uploadsDir = dirname(__DIR__) . '/demoimage/';
+if (!is_dir($uploadsDir)) {
+    mkdir($uploadsDir, 0755, true);
+}
+
+$safeName = preg_replace('/[^a-z0-9-]/', '', strtolower(str_replace(' ', '-', $name)));
+
+/**
+ * Validate + move a single uploaded file. Returns the public path (e.g. /demoimage/x.jpg)
+ * on success, or null on failure.
+ */
+function saveOneImage($tmpName, $size, $allowedTypes, $maxBytes, $uploadsDir, $safeName, $suffix) {
+    if ($size > $maxBytes) {
+        return null;
+    }
+
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mimeType = finfo_file($finfo, $_FILES['image']['tmp_name']);
+    $mimeType = finfo_file($finfo, $tmpName);
     finfo_close($finfo);
 
     if (!isset($allowedTypes[$mimeType])) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Image must be JPG, PNG, or WEBP.']);
-        exit();
-    }
-
-    if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Image must be under 5MB.']);
-        exit();
+        return null;
     }
 
     $ext = $allowedTypes[$mimeType];
-    $safeName = preg_replace('/[^a-z0-9-]/', '', strtolower(str_replace(' ', '-', $name)));
-    $filename = $safeName . '-' . time() . '.' . $ext;
-
-    $uploadsDir = dirname(__DIR__) . '/uploads/';
-    if (!is_dir($uploadsDir)) {
-        mkdir($uploadsDir, 0755, true);
-    }
-
+    $filename = $safeName . '-' . $suffix . '-' . time() . '-' . mt_rand(1000, 9999) . '.' . $ext;
     $destination = $uploadsDir . $filename;
 
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'Failed to save image.']);
-        exit();
+    if (!move_uploaded_file($tmpName, $destination)) {
+        return null;
     }
 
-    $imagePath = '/uploads/' . $filename;
+    return '/demoimage/' . $filename;
+}
+
+$images = [];
+
+// Main photo (required)
+if (!isset($_FILES['mainImage']) || $_FILES['mainImage']['error'] !== UPLOAD_ERR_OK) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Main photo is required.']);
+    exit();
+}
+
+$mainPath = saveOneImage(
+    $_FILES['mainImage']['tmp_name'],
+    $_FILES['mainImage']['size'],
+    $allowedTypes,
+    $maxBytes,
+    $uploadsDir,
+    $safeName,
+    'main'
+);
+
+if (!$mainPath) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Main photo must be JPG, PNG, or WEBP under 5MB.']);
+    exit();
+}
+
+$images[] = $mainPath;
+
+// Gallery photos (optional, max 4)
+if (isset($_FILES['galleryImages']) && is_array($_FILES['galleryImages']['tmp_name'])) {
+    $count = count($_FILES['galleryImages']['tmp_name']);
+
+    for ($i = 0; $i < min($count, 4); $i++) {
+        if ($_FILES['galleryImages']['error'][$i] !== UPLOAD_ERR_OK) {
+            continue;
+        }
+
+        $extraPath = saveOneImage(
+            $_FILES['galleryImages']['tmp_name'][$i],
+            $_FILES['galleryImages']['size'][$i],
+            $allowedTypes,
+            $maxBytes,
+            $uploadsDir,
+            $safeName,
+            'gallery-' . ($i + 1)
+        );
+
+        if ($extraPath) {
+            $images[] = $extraPath;
+        }
+    }
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -132,11 +182,11 @@ if (file_exists($dataPath)) {
 }
 
 $newProject = [
-    'name'  => $name,
-    'desc'  => $desc,
-    'url'   => $url,
-    'tags'  => $tags,
-    'image' => $imagePath, // null if no image was uploaded
+    'name'   => $name,
+    'desc'   => $desc,
+    'url'    => $url,
+    'tags'   => $tags,
+    'images' => $images, // images[0] is the main photo, rest are the hover-collage extras
 ];
 
 $projects[] = $newProject;

@@ -19,14 +19,23 @@
                    class="demo-card"
                    :style="{ transitionDelay: (i * 0.1) + 's' }">
                     <div class="demo-preview-wrap">
-                        <iframe :src="project.url"
-                                class="demo-preview-iframe"
-                                loading="lazy"
-                                tabindex="-1"
-                                scrolling="no"></iframe>
+                        <img :src="project.images && project.images[0]"
+                             class="demo-preview-main"
+                             loading="lazy"
+                             alt="" />
+
                         <div class="demo-preview-overlay">
                             <span class="visit-label">Visit site →</span>
                         </div>
+                    </div>
+
+                    <div v-if="project.images && project.images.length > 1"
+                         class="demo-popup-collage"
+                         :class="'collage-' + Math.min(project.images.length, 4)">
+                        <img v-for="(img, idx) in project.images.slice(0, 4)"
+                             :key="idx"
+                             :src="img"
+                             alt="" />
                     </div>
                     <div class="demo-info">
                         <h3 class="demo-name">{{ project.name }}</h3>
@@ -57,14 +66,30 @@
     // Change this if your API is deployed at a different path.
     const API_URL = '/api/projects.php'
 
-    const projects = ref([])
+    // Local-only test card so you can see the popup collage without the
+    // hosted JSON — only appears when running `npm run dev`, never in a
+    // production build. Swap the image URLs for real ones any time, or
+    // delete this block once you don't need it anymore.
+    const hardcodedProject = {
+        name: 'Local Preview',
+        desc: 'Hardcoded card for testing the hover popup locally.',
+        url: 'https://twodazzle.com',
+        tags: ['Test'],
+        images: [
+            'https://picsum.photos/seed/tdmain/640/400',
+            'https://picsum.photos/seed/tdtwo/640/400',
+            'https://picsum.photos/seed/tdthree/640/400'
+        ]
+    }
+
+    const projects = ref(import.meta.env.DEV ? [hardcodedProject] : [])
 
     onMounted(async () => {
         try {
             const res = await fetch(API_URL)
             const data = await res.json()
             if (Array.isArray(data)) {
-                projects.value = data
+                projects.value = import.meta.env.DEV ? [hardcodedProject, ...data] : data
             }
         } catch (err) {
             console.error('Failed to load projects:', err)
@@ -106,7 +131,8 @@
         background: var(--td-card-bg);
         border: 1px solid var(--td-card-border);
         border-radius: 14px;
-        overflow: hidden;
+        overflow: visible;
+        position: relative;
         transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
@@ -122,23 +148,19 @@
         aspect-ratio: 16 / 10;
         overflow: hidden;
         background: #0A0417;
+        border-radius: 14px 14px 0 0;
     }
 
-    .demo-preview-iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 250%;
-        height: 250%;
-        transform: scale(0.4);
-        transform-origin: top left;
-        border: none;
-        pointer-events: none;
+    .demo-preview-main {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
         transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    .demo-card:hover .demo-preview-iframe {
-        transform: scale(0.43);
+    .demo-card:hover .demo-preview-main {
+        transform: scale(1.05);
     }
 
     .demo-preview-overlay {
@@ -149,10 +171,64 @@
         justify-content: center;
         background: rgba(10, 4, 23, 0);
         transition: background 0.25s ease;
+        z-index: 1;
     }
 
     .demo-card:hover .demo-preview-overlay {
-        background: rgba(10, 4, 23, 0.55);
+        background: rgba(10, 4, 23, 0.4);
+    }
+
+    /* Popup collage — floats above the card on hover, showing all photos.
+       Swap grid-template-columns/rows here to change the layout per count. */
+    .demo-popup-collage {
+        position: absolute;
+        top: -18px;
+        left: -18px;
+        right: -18px;
+        aspect-ratio: 16 / 10;
+        display: grid;
+        gap: 3px;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        opacity: 0;
+        transform: scale(0.9);
+        transition: opacity 0.25s cubic-bezier(0.19, 1, 0.22, 1), transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    .demo-card:hover .demo-popup-collage {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .demo-popup-collage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* 2 photos: side by side */
+    .collage-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* 3 photos: one big on the left, two stacked on the right */
+    .collage-3 {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+        .collage-3 img:first-child {
+            grid-row: 1 / 3;
+        }
+
+    /* 4 photos: 2x2 grid */
+    .collage-4 {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
     }
 
     .visit-label {
