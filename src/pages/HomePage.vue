@@ -950,6 +950,7 @@ onBeforeUnmount(() => {
     @media (max-width: 640px) {
         .hero-section {
             padding: 3rem 0 3.5rem 0;
+            padding: calc(3rem + 75px) 0 3.5rem 0;
         }
 
         .container {
